@@ -132,26 +132,47 @@ namespace MiView.Common.Util
                 }
             });
         }
+        private static readonly object GdiLock = new object();
+
         private static DrawingImage? SafeLoadImageRobust(string path)
         {
             try
             {
-                using var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-                using var ms = new MemoryStream();
-                fs.CopyTo(ms);
-                ms.Position = 0;
+                if (!File.Exists(path))
+                    return null;
 
-                try
+                // ファイルサイズが極端に小さいものは破損とみなす
+                var fi = new FileInfo(path);
+                if (fi.Length < 64)
+                    return null;
+
+                // ファイルを完全コピー（ロック回避）
+                byte[] bytes;
+                using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var ms = new MemoryStream())
                 {
-                    return DrawingImage.FromStream(ms);
+                    fs.CopyTo(ms);
+                    bytes = ms.ToArray();
                 }
-                catch
+
+                // --- GDI+ が落ちやすいので排他制御 ---
+                lock (GdiLock)
                 {
-                    if (Path.GetExtension(path).Equals(".webp", StringComparison.OrdinalIgnoreCase))
+                    try
                     {
-                        return ConvertWebPToBitmap(ms.ToArray());
+                        using var ms = new MemoryStream(bytes);
+                        return DrawingImage.FromStream(ms);
                     }
-                    throw;
+                    catch (ArgumentException)
+                    {
+                        // WebP または破損GIFを ImageSharp 経由で再試行
+                        using var ms2 = new MemoryStream(bytes);
+                        using var image = ImageSharpImage.Load(ms2);
+                        using var outStream = new MemoryStream();
+                        image.SaveAsPng(outStream);
+                        outStream.Position = 0;
+                        return DrawingImage.FromStream(outStream);
+                    }
                 }
             }
             catch (Exception ex)
@@ -182,43 +203,58 @@ namespace MiView.Common.Util
         /// <summary>
         /// 破損ファイル対策でImageを安全に読み込む
         /// </summary>
-        private static Image? SafeLoadImage(string path)
+        private static System.Drawing.Image? SafeLoadImage(string path)
         {
             try
             {
-                if (!File.Exists(path)) return null;
+                // まずファイルサイズチェック（破損ファイル回避）
+                var fileInfo = new FileInfo(path);
+                if (!fileInfo.Exists || fileInfo.Length < 32) // 32バイト未満は確実に壊れている
+                    return null;
 
-                // 拡張子確認
-                string ext = Path.GetExtension(path).ToLowerInvariant();
-                using var fs = File.OpenRead(path);
-                using var ms = new MemoryStream();
-                fs.CopyTo(ms);
-                ms.Position = 0;
-
-                // GIFの場合は最初のフレームを固定PNGに変換してキャッシュ
-                if (ext == ".gif")
+                // 読み込み時にストリームを完全コピー（GDI+バグ対策）
+                using (var ms = new MemoryStream(File.ReadAllBytes(path)))
                 {
-                    using var gif = Image.FromStream(ms);
-                    var frame = new Bitmap(gif.Width, gif.Height);
-                    using (var g = Graphics.FromImage(frame))
+                    // GIF 対策：アニメーションGIFは1フレームだけ静止画化
+                    using (var img = System.Drawing.Image.FromStream(ms, useEmbeddedColorManagement: false, validateImageData: false))
                     {
-                        g.DrawImage(gif, Point.Empty);
+                        if (img.RawFormat.Guid == System.Drawing.Imaging.ImageFormat.Gif.Guid)
+                        {
+                            try
+                            {
+                                // アニメGIF → Bitmap化（1枚目のみ）
+                                var bmp = new System.Drawing.Bitmap(img.Width, img.Height);
+                                using (var g = System.Drawing.Graphics.FromImage(bmp))
+                                {
+                                    g.DrawImage(img, System.Drawing.Point.Empty);
+                                }
+                                return bmp;
+                            }
+                            catch
+                            {
+                                return null;
+                            }
+                        }
+                        else
+                        {
+                            // 通常画像はクローンして返す（ファイルロック防止）
+                            return new System.Drawing.Bitmap(img);
+                        }
                     }
-
-                    string pngPath = Path.ChangeExtension(path, ".png");
-                    frame.Save(pngPath, System.Drawing.Imaging.ImageFormat.Png);
-
-                    return frame;
                 }
-
-                // 通常の画像 (PNG/JPG等)
-                ms.Position = 0;
-                var img = Image.FromStream(ms, useEmbeddedColorManagement: false, validateImageData: true);
-                return (Image)img.Clone();
             }
-            catch (Exception ex)
+            catch (OutOfMemoryException)
             {
-                Console.WriteLine($"[ImageCacher] SafeLoadImage failed: {path} ({ex.Message})");
+                // GDI+ が画像として認識できないファイル
+                return null;
+            }
+            catch (ArgumentException)
+            {
+                // Parameter is not valid
+                return null;
+            }
+            catch (Exception ce)
+            {
                 return null;
             }
         }

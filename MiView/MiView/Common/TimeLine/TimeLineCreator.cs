@@ -995,17 +995,27 @@ namespace MiView.Common.TimeLine
                 }
                 else
                 {
-                    //var img = ImageCacher.Instance.TryGetImage(this._Definition + "@@" + this._TimeLineData[e.RowIndex].USERID);
-                    //if (img != null)
-                    //{
-                    //    e.Value = img;
-                    //}
-                    //else
-                    //{
-                    //    // キャッシュがなければ非同期ダウンロード開始
-                    //    //ImageCacher.Instance.SaveIconImage(this._Definition + "@@" + this._TimeLineData[e.RowIndex].USERID, data.IconUrl);
-                    //    //e.Value = Properties.Resources.placeholder; // 仮アイコン
-                    //}
+                    var img = ImageCacher.Instance.TryGetImage(this._Definition + "@@" + this._TimeLineData[e.RowIndex].USERID);
+                    if (img != null)
+                    {
+                        e.Value = img;
+                    }
+                    else
+                    {
+                        // キャッシュがなければ非同期ダウンロード開始
+                        try
+                        {
+                            if (this._TimeLineData[e.RowIndex].ORIGINAL != null && this._TimeLineData[e.RowIndex].ORIGINAL.ToString() != string.Empty)
+                            {
+                                ImageCacher.Instance.SaveIconImage(this._Definition + "@@" + this._TimeLineData[e.RowIndex].USERID,
+                                                                   JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(this._TimeLineData[e.RowIndex].ORIGINAL).Note.User.AvatarUrl));
+                            }
+                        }
+                        catch(Exception ce)
+                        {
+                        }
+                        e.Value = null; // 仮アイコン
+                    }
                     return;
                 }
             }
@@ -1091,8 +1101,8 @@ namespace MiView.Common.TimeLine
                     // ImageCacher.Instance.SaveIconImage();
                     if (LocalContainer.ORIGINAL != null && LocalContainer.ORIGINAL.ToString() != string.Empty)
                     {
-                        //ImageCacher.Instance.SaveIconImage(this._Definition + "@@" + Container.USERID, JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
-                        //System.Diagnostics.Debug.WriteLine(JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
+                        ImageCacher.Instance.SaveIconImage(this._Definition + "@@" + Container.USERID, JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
+                        System.Diagnostics.Debug.WriteLine(JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
                     }
 
                     // 行挿入
@@ -1160,11 +1170,10 @@ namespace MiView.Common.TimeLine
                         Opt.ExecuteAlert(LocalContainer);
                     }
                 }
-                //ImageCacher.Instance.ImageDownloaded += key =>
-                //{
-                //    // 該当の行だけ再描画（例）
-                //    this.Invalidate();
-                //};
+                ImageCacher.Instance.ImageDownloaded += key =>
+                {
+                    this.Invalidate();
+                };
             }
             catch (Exception ce)
             {
