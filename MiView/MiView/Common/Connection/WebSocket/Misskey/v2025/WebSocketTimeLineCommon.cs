@@ -1,10 +1,12 @@
 ﻿using Microsoft.VisualBasic.Logging;
 using MiView.Common.AnalyzeData;
+using MiView.Common.AnalyzeData.Format.Misskey.v2025;
 using MiView.Common.Connection.VersionInfo;
 using MiView.Common.Connection.WebSocket.Controller;
 using MiView.Common.Connection.WebSocket.Event;
 using MiView.Common.Connection.WebSocket.Structures;
 using MiView.Common.TimeLine;
+using MiView.Common.TimeLine.Event;
 using MiView.Common.Util;
 using System.Diagnostics;
 using System.Net.WebSockets;
@@ -13,6 +15,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using ChannelToTimeLineContainer = MiView.Common.AnalyzeData.Format.Misskey.v2025.ChannelToTimeLineContainer;
 
 namespace MiView.Common.Connection.WebSocket.Misskey.v2025
 {
@@ -291,6 +294,142 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
             // System.Diagnostics.Debug.WriteLine(Response);
         }
 
+        protected override void OnDataRowAdded(object? sender, DataGridTimeLineAddedEvent e)
+        {
+            System.Diagnostics.Debug.WriteLine(ChannelToTimeLineData.Get(e.Container?.ORIGINAL).Note);
+            string NoteId = JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(e.Container?.ORIGINAL).Note.Id);
+            if (NoteId == null || NoteId == string.Empty)
+            {
+                return;
+            }
+            _ = Task.Run(async () =>
+            {
+                await SubScribeNote(NoteId, e);
+            });
+        }
+
+        private Dictionary<string, DataGridTimeLineAddedEvent> SubScribedNoteEvent = new Dictionary<string, DataGridTimeLineAddedEvent>();
+        protected override async Task SubScribeNote(string NoteId, DataGridTimeLineAddedEvent e)
+        {
+            try
+            {
+                if (this.WebSocket == null || this.WebSocket.State != WebSocketState.Open)
+                {
+                    LogOutput.Write(LogOutput.LOG_LEVEL.ERROR,
+                        $"[Resubscribe] socket not open, cannot resubscribe {_HostDefinition} {_TLKind}");
+                    return;
+                }
+
+                // 1) connect が ACK (connected) を返すのを待てる TaskCompletionSource を使う仕組み
+                //    既に接続済みで connected を受けているならスキップ可能。
+                //    ここでは最小限の実装として connected を待つ helper を呼ぶ想定にする。
+                //    WaitForConnectedAsync は下に示す補助実装を参照。
+                await WaitForConnectedAsync(); // 既に connected なら即時戻る
+
+                // 2) subNote を送る（公式ドキュメントの通り）
+                var subNote = new
+                {
+                    type = "subNote",
+                    body = new
+                    {
+                        id = NoteId   // body.id はキャプチャ対象の Note ID
+                    }
+                };
+
+                SubScribedNoteEvent[NoteId] = e;
+                await SendJsonAsync(subNote);
+
+                LogOutput.Write(LogOutput.LOG_LEVEL.INFO,
+                    $"[Resubscribe] subNote sent for {NoteId} {_HostDefinition} {_TLKind}");
+            }
+            catch (Exception ex)
+            {
+                LogOutput.Write(LogOutput.LOG_LEVEL.ERROR,
+                    $"[Resubscribe] Failed: {ex.Message} {_HostDefinition} {_TLKind}");
+                LogOutput.Write(LogOutput.LOG_LEVEL.ERROR, ex.ToString());
+            }
+        }
+        protected async Task UnSubScribeNote(string NoteId)
+        {
+            try
+            {
+                var unsub = new
+                {
+                    type = "unsubNote",
+                    body = new
+                    {
+                        id = NoteId
+                    }
+                };
+                SubScribedNoteEvent.Remove(NoteId);
+                await SendJsonAsync(unsub);
+                LogOutput.Write(LogOutput.LOG_LEVEL.INFO, $"[Resubscribe] unsubNote sent for {NoteId}");
+            }
+            catch (Exception ex)
+            {
+                LogOutput.Write(LogOutput.LOG_LEVEL.ERROR, ex.ToString());
+            }
+        }
+
+        // クラスフィールド（WebSocketTimeLineCommon）
+        private readonly Dictionary<string, TaskCompletionSource<bool>> _connectedTcs = new();
+
+        // 呼び出し側は任意のキー（例 "main"）で待つ
+        private async Task WaitForConnectedAsync(int timeoutMs = 5000)
+        {
+            // 既に connected フラグがあれば早期return（実装依存）
+            // 簡単実装：常に待つ仕組みにしておく（OnDataReceived 側で SetResult）
+            var key = "connected_global";
+
+            lock (_connectedTcs)
+            {
+                if (!_connectedTcs.TryGetValue(key, out var tcs))
+                {
+                    tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                    _connectedTcs[key] = tcs;
+                }
+            }
+
+            var task = _connectedTcs[key].Task;
+            if (await Task.WhenAny(task, Task.Delay(timeoutMs)) == task)
+            {
+                // 成功
+                return;
+            }
+            else
+            {
+                // タイムアウトしても送ってみる（保険）
+                LogOutput.Write(LogOutput.LOG_LEVEL.WARNING, "[Resubscribe] WaitForConnectedAsync timed out, proceeding anyway.");
+            }
+        }
+
+        // OnDataReceived の中で 'connected' を検出したら実行:
+        private void HandleConnectedMessage(string id)
+        {
+            var key = "connected_global";
+            lock (_connectedTcs)
+            {
+                if (_connectedTcs.TryGetValue(key, out var tcs) && !tcs.Task.IsCompleted)
+                {
+                    tcs.SetResult(true);
+                    // Optional: remove it so future reconnects recreate it
+                    _connectedTcs.Remove(key);
+                }
+            }
+        }
+
+
+        private async Task SendJsonAsync(object obj)
+        {
+            var json = JsonSerializer.Serialize(obj);
+
+            LogOutput.Write(LogOutput.LOG_LEVEL.INFO,
+                $"[Resubscribe] Sent reconnect channel message: {json} {_HostDefinition} {_TLKind}");
+
+            var bytes = Encoding.UTF8.GetBytes(json);
+            await this.WebSocket!.SendAsync(bytes, WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
         /// <summary>
         /// 接続喪失時
         /// </summary>
@@ -353,11 +492,31 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                 dynamic Res = System.Text.Json.JsonDocument.Parse(e.MessageRaw);
                 var t = JsonNode.Parse(e.MessageRaw);
 
-                // ChannelToTimeLineData.Type(t);
+                //System.Diagnostics.Debug.WriteLine(t);
+
+                System.Diagnostics.Debug.WriteLine(JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(t).ResponseType));
+
+                if (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(t).ResponseType) != "channel")
+                {
+                    System.Diagnostics.Debug.WriteLine(JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(t).ResponseType));
+                    System.Diagnostics.Debug.WriteLine(t);
+                    System.Diagnostics.Debug.WriteLine("ads");
+                    try
+                    {
+                        string NoteId = JsonConverterCommon.GetStr(NoteUpdatedInfo.Get(t).Id);
+                        ChannelToTimeLineAlert.ConvertTimeLineAction(NoteUpdatedInfo.Get(t).Type?.ToString(), t, this.SubScribedNoteEvent[NoteId]);
+                    }
+                    catch
+                    {
+                    }
+                    return;
+                }
+
+                TimeLineContainer TLCon = ChannelToTimeLineContainer.ConvertTimeLineContainer(this._HostDefinition, t);
 
                 foreach (DataGridTimeLine DGrid in this._TimeLineObject)
                 {
-                    TimeLineContainer TLCon = ChannelToTimeLineContainer.ConvertTimeLineContainer(this._HostDefinition, t);
+                    int AddedRowIndex = 0;
                     if (DGrid.InvokeRequired)
                     {
                         if (!DGrid._IsFiltered)
@@ -387,7 +546,7 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                                         // 通常TL
                                         try
                                         {
-                                            DGrid.InsertTimeLineData(TLCon);
+                                            DGrid.InsertTimeLineData(TLCon, out AddedRowIndex);
 
                                             foreach (TimeLineAlertOption Opt in DGrid._AlertAccept)
                                             {
@@ -409,9 +568,16 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                                                 }
                                             }
                                             CallDataAccepted(TLCon);
+
+                                            DataGridTimeLineAddedEvent DGEvent = new DataGridTimeLineAddedEvent();
+                                            DGEvent.Container = TLCon;
+                                            DGEvent.WebSocketManager = this;
+                                            DGEvent.RowIndex = AddedRowIndex;
+                                            DGrid.OnDataGridTimeLinePostAdded(TLCon, DGEvent);
                                         }
                                         catch (Exception ce)
                                         {
+                                            System.Diagnostics.Debug.WriteLine("[out]");
                                             System.Diagnostics.Debug.WriteLine(ce.ToString());
                                         }
                                     }
@@ -470,7 +636,7 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                                         // 通常TL
                                         try
                                         {
-                                            DGrid.InsertTimeLineData(TLCon);
+                                            DGrid.InsertTimeLineData(TLCon, out AddedRowIndex);
                                             foreach (TimeLineAlertOption Opt in DGrid._AlertAccept)
                                             {
                                                 Found = Opt._FilterOptions.FindAll(r => { return r.FilterResult(); }).Count();
@@ -491,6 +657,12 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                                                 }
                                             }
                                             CallDataAccepted(TLCon);
+
+                                            DataGridTimeLineAddedEvent DGEvent = new DataGridTimeLineAddedEvent();
+                                            DGEvent.Container = TLCon;
+                                            DGEvent.WebSocketManager = this;
+                                            DGEvent.RowIndex = AddedRowIndex;
+                                            DGrid.OnDataGridTimeLinePostAdded(TLCon, DGEvent);
                                         }
                                         catch (Exception ce)
                                         {
@@ -528,9 +700,11 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception q)
             {
+                System.Diagnostics.Debug.WriteLine("[DG]");
                 System.Diagnostics.Debug.WriteLine(e.MessageRaw);
+                System.Diagnostics.Debug.WriteLine(q.StackTrace);
             }
         }
         // WebSocketTimeLineCommon クラス内に追加
@@ -550,7 +724,7 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                 // 例: main チャンネルを送る（note イベントを受けたいなら main を送る）
                 var connectMain = new
                 {
-                    type = "connect",
+                    type = "capture",
                     body = new { channel = this._WebSocketConnectionObj.channel ?? "main", id = this._WebSocketConnectionObj.id ?? Guid.NewGuid().ToString() }
                 };
 

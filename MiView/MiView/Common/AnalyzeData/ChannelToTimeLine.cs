@@ -1,5 +1,6 @@
 ﻿using MiView.Common.AnalyzeData.Format.Misskey.v2025;
 using MiView.Common.TimeLine;
+using MiView.Common.TimeLine.Event;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -168,6 +169,45 @@ namespace MiView.Common.AnalyzeData
                     break;
             }
             return Status;
+        }
+    }
+
+    internal class ChannelToTimeLineAlert
+    {
+        public static void ConvertTimeLineAction(string? ResponseType, JsonNode? Input, DataGridTimeLineAddedEvent e)
+        {
+            switch(ResponseType)
+            {
+                case "reacted":
+                    ConvertTimeLineReactionEvent(Input, e);
+                    break;
+                case "unreacted":
+                    ConvertTimeLineUnReactionEvent(Input, e);
+                    break;
+                case "deleted":
+                    ConvertTimeLinePostDeletedEvent(Input, e);
+                    break;
+                case "updated":
+                    break;
+            }
+        }
+
+        public static void ConvertTimeLineReactionEvent(JsonNode? Input, DataGridTimeLineAddedEvent e)
+        {
+        }
+
+        public static void ConvertTimeLineUnReactionEvent(JsonNode? Input, DataGridTimeLineAddedEvent e)
+        {
+        }
+
+        public static void ConvertTimeLinePostDeletedEvent(JsonNode? Input, DataGridTimeLineAddedEvent e)
+        {
+            System.Diagnostics.Debug.WriteLine(e.RowIndex);
+            DataGridTimeLineUpdateEvent DGEvent = new DataGridTimeLineUpdateEvent();
+            DGEvent.RowIndex = e.RowIndex;
+            DGEvent.EventKind = DataGridTimeLineUpdateEvent.EventType.DELETE;
+
+            e.DataGridTimeLine.CallDataGridTimeLinePostUpdate(DGEvent);
         }
     }
 }

@@ -4,6 +4,7 @@ using MiView.Common.Connection.WebSocket;
 using MiView.Common.Fonts;
 using MiView.Common.Fonts.Material;
 using MiView.Common.Notification;
+using MiView.Common.TimeLine.Event;
 using MiView.Common.Util;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using static MiView.Common.TimeLine.TimeLineCreator;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace MiView.Common.TimeLine
 {
@@ -49,6 +51,14 @@ namespace MiView.Common.TimeLine
             /// ユーザID
             /// </summary>
             USERID,
+            /// <summary>
+            /// 削除済み
+            /// </summary>
+            DELETED,
+            /// <summary>
+            /// 削除済み表示
+            /// </summary>
+            DELETED_DISP,
             /// <summary>
             /// リプライ
             /// </summary>
@@ -147,6 +157,7 @@ namespace MiView.Common.TimeLine
             TIMELINE_ELEMENT.CW,
             TIMELINE_ELEMENT.UNDESIGNATED,
             TIMELINE_ELEMENT.IDENTIFIED,
+            TIMELINE_ELEMENT.DELETED,
             TIMELINE_ELEMENT.RENOTED,
             TIMELINE_ELEMENT.PROTECTED,
             TIMELINE_ELEMENT.ISLOCAL,
@@ -427,7 +438,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault,
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Direct,
@@ -439,7 +450,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Public,
@@ -452,7 +463,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Public,
@@ -467,7 +478,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Public,
@@ -481,7 +492,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Public,
@@ -495,7 +506,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Public,
@@ -507,7 +518,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.SemiPublic,
@@ -519,7 +530,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Home,
@@ -531,7 +542,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Follower,
@@ -543,7 +554,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Direct,
@@ -555,7 +566,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Direct,
@@ -567,7 +578,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
             DgTimeLine.InsertTimeLineData(new TimeLineContainer()
             {
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Direct,
@@ -579,7 +590,7 @@ namespace MiView.Common.TimeLine
                 SOFTWARE = "MiView 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
-            });
+            }, out _);
 #endif
         }
 
@@ -681,6 +692,8 @@ namespace MiView.Common.TimeLine
         public string ICON { get; set; } = string.Empty;
         public string USERNAME { get; set; } = string.Empty;
         public string USERID { get; set; } = string.Empty;
+        public bool DELETED { get; set; } = false;
+        public string? DELETED_DISP {  get; set; }
         public bool REPLAYED { get; set; } = false;
         public string? REPLAYED_DISP {  get; set; }
         public PROTECTED_STATUS PROTECTED { get; set; } = PROTECTED_STATUS.Public;
@@ -800,6 +813,11 @@ namespace MiView.Common.TimeLine
         private static string _Common_Channel = MaterialIcons.Tv;
 
         /// <summary>
+        /// 削除済みor削除
+        /// </summary>
+        private static string _Common_Deleted = MaterialIcons.Delete;
+
+        /// <summary>
         /// フィルタTLかどうか
         /// </summary>
         public bool _IsFiltered = false;
@@ -848,6 +866,17 @@ namespace MiView.Common.TimeLine
         public bool _IsUpdateTL = true;
 
         /// <summary>
+        /// タイムラインの最新行を常に選択するかどうか
+        /// </summary>
+        /// <remarks>
+        /// デフォルトではON
+        /// </remarks>
+        public bool _IsBelowPosition = true;
+        public event EventHandler<DataGridTimeLineAddedEvent> _DataGridTimeLineAdded;
+        public event EventHandler<DataGridTimeLineAddedEvent> _DataGridTimeLineAccepted;
+        public event EventHandler<DataGridTimeLineUpdateEvent> _DataGridTimeLineUpdate;
+
+        /// <summary>
         /// フィルタに投稿を設定
         /// </summary>
         /// <param name="Container"></param>
@@ -879,6 +908,7 @@ namespace MiView.Common.TimeLine
             { TIMELINE_ELEMENT.ICON, 20 },
             { TIMELINE_ELEMENT.USERNAME, 60 },
             { TIMELINE_ELEMENT.USERID, 60 },
+            { TIMELINE_ELEMENT.DELETED_DISP, 20 },
             { TIMELINE_ELEMENT.REPLAYED_DISP, 20 },
             { TIMELINE_ELEMENT.PROTECTED_DISP, 20 },
             { TIMELINE_ELEMENT.ISLOCAL_DISP, 20 },
@@ -904,6 +934,10 @@ namespace MiView.Common.TimeLine
             this.ReadOnly = true;
             this.AllowUserToAddRows = false;
             this.AllowUserToDeleteRows = false;
+
+            this.SelectionChanged += OnSelectionChanged;
+            this._DataGridTimeLineAdded += OnDataGridTimeLinePostAdded;
+            this._DataGridTimeLineUpdate += OnDataGridTimeLinePostUpdate;
 
             ImageCacher.Instance.ImageLoaded += OnImageLoaded;
 
@@ -936,7 +970,8 @@ namespace MiView.Common.TimeLine
                 }
 
                 // マーク列
-                if (ColName == TimeLineCreator.TIMELINE_ELEMENT.REPLAYED_DISP.ToString() ||
+                if (ColName == TimeLineCreator.TIMELINE_ELEMENT.DELETED_DISP.ToString() ||
+                    ColName == TimeLineCreator.TIMELINE_ELEMENT.REPLAYED_DISP.ToString() ||
                     ColName == TimeLineCreator.TIMELINE_ELEMENT.PROTECTED_DISP.ToString() ||
                     ColName == TimeLineCreator.TIMELINE_ELEMENT.ISLOCAL_DISP.ToString() ||
                     ColName == TimeLineCreator.TIMELINE_ELEMENT.RENOTED_DISP.ToString() ||
@@ -1053,6 +1088,34 @@ namespace MiView.Common.TimeLine
             this.Invalidate();
         }
 
+        public void OnDataGridTimeLinePostAdded(object? sender, DataGridTimeLineAddedEvent e)
+        {
+            e.DataGridTimeLine = this;
+            e.WebSocketManager?.CallDataRowAdded(e);
+        }
+        public void CallDataGridTimeLinePostUpdate(DataGridTimeLineUpdateEvent e) => _DataGridTimeLineUpdate?.Invoke(this, e);
+        public void OnDataGridTimeLinePostUpdate(object? sender, DataGridTimeLineUpdateEvent e)
+        {
+            switch(e.EventKind)
+            {
+                case DataGridTimeLineUpdateEvent.EventType.DELETE:
+                    OnDataGridTimeLinePostUpdate_Delete(e);
+                    break;
+            }
+        }
+        private void OnDataGridTimeLinePostUpdate_Delete(DataGridTimeLineUpdateEvent e)
+        {
+            if (e.RowIndex < 0 || e.RowIndex >= _TimeLineData.Count)
+                return;
+
+            this._TimeLineData[e.RowIndex].DELETED = true;
+        }
+
+        public void OnSelectionChanged (object? sender, EventArgs e)
+        {
+            this._IsBelowPosition = this.CurrentCell.RowIndex == this.Rows.Count - 1;
+        }
+
         private static int _cntGlobal = 0;
 
         private object tlsimlock = new object();
@@ -1060,8 +1123,9 @@ namespace MiView.Common.TimeLine
         /// 行挿入
         /// </summary>
         /// <param name="Container"></param>
-        public void InsertTimeLineData(TimeLineContainer Container)
+        public void InsertTimeLineData(TimeLineContainer Container, out int RowIndex)
         {
+            RowIndex = -1;
             if (!_IsUpdateTL)
             {
                 return;
@@ -1110,9 +1174,21 @@ namespace MiView.Common.TimeLine
                     this.RowCount = this._TimeLineData.Count;
 
                     int CurrentRowIndex = this.RowCount - 1;
+                    RowIndex = CurrentRowIndex;
 
                     // 基本行高さ
                     this.Rows[CurrentRowIndex].Height = 20;
+
+                    if (this._IsBelowPosition)
+                    {
+                        try
+                        {
+                            this.FirstDisplayedScrollingRowIndex = CurrentRowIndex;
+                        }
+                        catch
+                        {
+                        }
+                    }
                 }
 
                 // フォントは行ごとに定義する
@@ -1201,6 +1277,7 @@ namespace MiView.Common.TimeLine
             if (ColumnIndex != (int)TimeLineCreator.TIMELINE_ELEMENT.REPLAYED &&
                 ColumnIndex != (int)TimeLineCreator.TIMELINE_ELEMENT.PROTECTED &&
                 ColumnIndex != (int)TimeLineCreator.TIMELINE_ELEMENT.ISLOCAL &&
+                ColumnIndex != (int)TimeLineCreator.TIMELINE_ELEMENT.DELETED &&
                 ColumnIndex != (int)TimeLineCreator.TIMELINE_ELEMENT.RENOTED &&
                 ColumnIndex != (int)TimeLineCreator.TIMELINE_ELEMENT.CW &&
                 ColumnIndex != (int)TimeLineCreator.TIMELINE_ELEMENT.ISCHANNEL &&
@@ -1219,6 +1296,18 @@ namespace MiView.Common.TimeLine
             }
             switch (ColumnIndex)
             {
+                case (int)TimeLineCreator.TIMELINE_ELEMENT.DELETED:
+                    if ((bool)CellValue)
+                    {
+                        this._TimeLineData[RowIndex].DELETED_DISP = _Common_Deleted;
+                        this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.DELETED_DISP].ToolTipText = "削除済み";
+                        this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.DELETED_DISP].Style.ForeColor = Color.Red;
+                        this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.DETAIL].Style.ForeColor = Color.Red;
+                        this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.UPDATEDAT].Style.ForeColor = Color.Red;
+                        this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.USERID].Style.ForeColor = Color.Red;
+                        this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.USERNAME].Style.ForeColor = Color.Red;
+                    }
+                    break;
                 case (int)TimeLineCreator.TIMELINE_ELEMENT.REPLAYED:
                     // this.Rows[RowIndex].Cells[TimeLineCreator.TIMELINE_ELEMENT.REPLAYED_DISP.ToString()].Value
                     this._TimeLineData[RowIndex].REPLAYED_DISP

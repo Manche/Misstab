@@ -83,4 +83,10 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
             set; get;
         } = TimeLineBasic.ConnectTimeLineKind.Local;
     }
+
+    internal class WebSocketTimeLineNoteSubScribe : WebSocketTimeLineCommon
+    {
+        public string Type { get; set; } = string.Empty;
+        public string BodyId { get; set; } = string.Empty;
+    }
 }

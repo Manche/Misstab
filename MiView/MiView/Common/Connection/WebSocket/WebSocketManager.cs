@@ -5,10 +5,12 @@ using MiView.Common.Connection.WebSocket.Event;
 using MiView.Common.Connection.WebSocket.Misskey.v2025;
 using MiView.Common.Connection.WebSocket.Structures;
 using MiView.Common.TimeLine;
+using MiView.Common.TimeLine.Event;
 using MiView.Common.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Reflection.Metadata;
@@ -55,6 +57,7 @@ namespace MiView.Common.Connection.WebSocket
         public event EventHandler<ConnectDataReceivedEventArgs> DataReceived;
         public event EventHandler<DataContainerEventArgs>? DataAccepted;
         public event EventHandler<DataContainerEventArgs>? DataRejected;
+        public event EventHandler<DataGridTimeLineAddedEvent> DataRowsAdded;
 
         public WebSocketManager()
         {
@@ -62,6 +65,7 @@ namespace MiView.Common.Connection.WebSocket
             this.DataReceived += OnDataReceived;
             this.DataAccepted += OnDataAccepted;
             this.DataRejected += OnDataRejected;
+            this.DataRowsAdded += OnDataRowAdded;
         }
 
         public WebSocketManager(string HostUrl) : this()
@@ -207,6 +211,11 @@ namespace MiView.Common.Connection.WebSocket
         protected virtual void OnDataRejected(object? sender, DataContainerEventArgs Container)
         {
             this._MainForm.CallDataRejected(Container.Container);
+        }
+        public void CallDataRowAdded(DataGridTimeLineAddedEvent e) => DataRowsAdded?.Invoke(this, e);
+        protected virtual void OnDataRowAdded(object? sender, DataGridTimeLineAddedEvent e)
+        {
+            System.Diagnostics.Debug.WriteLine(e.Container.RENOTED);
         }
         public void CallDataRejected(TimeLineContainer Container) => DataRejected?.Invoke(this, new DataContainerEventArgs());
 
@@ -491,6 +500,10 @@ namespace MiView.Common.Connection.WebSocket
             }
         }
 
+        protected virtual async Task SubScribeNote(string NoteId, DataGridTimeLineAddedEvent e)
+        {
+        }
+
 
         /// <summary>
         /// 再接続
@@ -554,6 +567,7 @@ namespace MiView.Common.Connection.WebSocket
         {
             // デフォルト: 何もしない（派生クラスはオーバーライドして再購読などを行う）
         }
+
         private async Task ReceiveLoop(CancellationToken token)
         {
             byte[] buffer = new byte[8192];
