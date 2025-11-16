@@ -12,9 +12,13 @@ namespace MiView.Common.TimeLine.Event
         public bool IsAdded { get; set; } = false;
         public bool IsOrigin {  get; set; } = false;
         public TimeLineContainer? Container { get; set; }
-        public DataGridTimeLine? DataGridTimeLine { get; set; }
-        public int RowIndex { get; set; }
+        public List<DataGridTimeLineUpdaterContainer> GridContainer {  get; set; } = new List<DataGridTimeLineUpdaterContainer>();
         public WebSocketManager? WebSocketManager { get; set; }
+    }
+    public class DataGridTimeLineUpdaterContainer
+    {
+        public DataGridTimeLine? DGrid;
+        public int RowIndex;
     }
 
     public class DataGridTimeLineUpdateEvent : EventArgs

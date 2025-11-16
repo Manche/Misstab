@@ -1090,7 +1090,6 @@ namespace MiView.Common.TimeLine
 
         public void OnDataGridTimeLinePostAdded(object? sender, DataGridTimeLineAddedEvent e)
         {
-            e.DataGridTimeLine = this;
             e.WebSocketManager?.CallDataRowAdded(e);
         }
         public void CallDataGridTimeLinePostUpdate(DataGridTimeLineUpdateEvent e) => _DataGridTimeLineUpdate?.Invoke(this, e);
@@ -1108,7 +1107,16 @@ namespace MiView.Common.TimeLine
             if (e.RowIndex < 0 || e.RowIndex >= _TimeLineData.Count)
                 return;
 
+            if (this.InvokeRequired)
+            {
+                this.Invoke(OnDataGridTimeLinePostUpdate_Delete, e);
+            }
             this._TimeLineData[e.RowIndex].DELETED = true;
+            // this._TimeLineData.RemoveAt(e.RowIndex);
+            //lock (this)
+            //{
+            //    this.Rows.RemoveAt(e.RowIndex);
+            //}
         }
 
         public void OnSelectionChanged (object? sender, EventArgs e)
@@ -1157,6 +1165,7 @@ namespace MiView.Common.TimeLine
                             (Intg[0]).TLFROM = CtlVal + "," + LocalContainer.TLFROM;
                             this._TimeLineData[this._TimeLineData.IndexOf(Intg[0])].TLFROM = CtlVal + "," + LocalContainer.TLFROM;
                         }
+                        RowIndex = this._TimeLineData.IndexOf(Intg[0]);
                         return;
                     }
 

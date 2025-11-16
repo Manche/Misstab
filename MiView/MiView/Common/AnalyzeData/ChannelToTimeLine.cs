@@ -202,12 +202,14 @@ namespace MiView.Common.AnalyzeData
 
         public static void ConvertTimeLinePostDeletedEvent(JsonNode? Input, DataGridTimeLineAddedEvent e)
         {
-            System.Diagnostics.Debug.WriteLine(e.RowIndex);
-            DataGridTimeLineUpdateEvent DGEvent = new DataGridTimeLineUpdateEvent();
-            DGEvent.RowIndex = e.RowIndex;
-            DGEvent.EventKind = DataGridTimeLineUpdateEvent.EventType.DELETE;
 
-            e.DataGridTimeLine.CallDataGridTimeLinePostUpdate(DGEvent);
+            foreach (DataGridTimeLineUpdaterContainer GridContainer in e.GridContainer)
+            {
+                DataGridTimeLineUpdateEvent DGEvent = new DataGridTimeLineUpdateEvent();
+                DGEvent.EventKind = DataGridTimeLineUpdateEvent.EventType.DELETE;
+                DGEvent.RowIndex = GridContainer.RowIndex;
+                GridContainer.DGrid?.CallDataGridTimeLinePostUpdate(DGEvent);
+            }
         }
     }
 }

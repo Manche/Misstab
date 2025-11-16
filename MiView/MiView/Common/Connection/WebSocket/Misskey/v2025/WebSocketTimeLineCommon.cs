@@ -296,15 +296,21 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
 
         protected override void OnDataRowAdded(object? sender, DataGridTimeLineAddedEvent e)
         {
+            System.Diagnostics.Debug.WriteLine("ondatarowadded");
             System.Diagnostics.Debug.WriteLine(ChannelToTimeLineData.Get(e.Container?.ORIGINAL).Note);
             string NoteId = JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(e.Container?.ORIGINAL).Note.Id);
+            System.Diagnostics.Debug.WriteLine(e.Container.ORIGINAL_HOST);
+            System.Diagnostics.Debug.WriteLine(NoteId);
             if (NoteId == null || NoteId == string.Empty)
             {
                 return;
             }
             _ = Task.Run(async () =>
             {
-                await SubScribeNote(NoteId, e);
+                foreach (DataGridTimeLineUpdaterContainer GridContainer in e.GridContainer)
+                {
+                    await SubScribeNote(NoteId, e);
+                }
             });
         }
 
@@ -494,13 +500,13 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
 
                 //System.Diagnostics.Debug.WriteLine(t);
 
-                System.Diagnostics.Debug.WriteLine(JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(t).ResponseType));
+                // System.Diagnostics.Debug.WriteLine(JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(t).ResponseType));
 
                 if (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(t).ResponseType) != "channel")
                 {
+                    System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
                     System.Diagnostics.Debug.WriteLine(JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(t).ResponseType));
                     System.Diagnostics.Debug.WriteLine(t);
-                    System.Diagnostics.Debug.WriteLine("ads");
                     try
                     {
                         string NoteId = JsonConverterCommon.GetStr(NoteUpdatedInfo.Get(t).Id);
@@ -509,10 +515,14 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                     catch
                     {
                     }
+                    System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
                     return;
                 }
 
                 TimeLineContainer TLCon = ChannelToTimeLineContainer.ConvertTimeLineContainer(this._HostDefinition, t);
+                DataGridTimeLineAddedEvent DGEvent = new DataGridTimeLineAddedEvent();
+                DGEvent.Container = TLCon;
+                DGEvent.WebSocketManager = this;
 
                 foreach (DataGridTimeLine DGrid in this._TimeLineObject)
                 {
@@ -569,11 +579,12 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                                             }
                                             CallDataAccepted(TLCon);
 
-                                            DataGridTimeLineAddedEvent DGEvent = new DataGridTimeLineAddedEvent();
-                                            DGEvent.Container = TLCon;
-                                            DGEvent.WebSocketManager = this;
-                                            DGEvent.RowIndex = AddedRowIndex;
+                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
+                                            DGEvent.GridContainer.Add(new DataGridTimeLineUpdaterContainer() { DGrid = DGrid, RowIndex = AddedRowIndex });
                                             DGrid.OnDataGridTimeLinePostAdded(TLCon, DGEvent);
+                                            System.Diagnostics.Debug.WriteLine(DGrid._Definition);
+                                            System.Diagnostics.Debug.WriteLine(ChannelToTimeLineData.Get(TLCon.ORIGINAL).Note.Id);
+                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
                                         }
                                         catch (Exception ce)
                                         {
@@ -658,11 +669,11 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                                             }
                                             CallDataAccepted(TLCon);
 
-                                            DataGridTimeLineAddedEvent DGEvent = new DataGridTimeLineAddedEvent();
-                                            DGEvent.Container = TLCon;
-                                            DGEvent.WebSocketManager = this;
-                                            DGEvent.RowIndex = AddedRowIndex;
+                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
                                             DGrid.OnDataGridTimeLinePostAdded(TLCon, DGEvent);
+                                            System.Diagnostics.Debug.WriteLine(DGrid._Definition);
+                                            System.Diagnostics.Debug.WriteLine(ChannelToTimeLineData.Get(TLCon.ORIGINAL).Note.Id);
+                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
                                         }
                                         catch (Exception ce)
                                         {

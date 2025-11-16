@@ -113,6 +113,7 @@ namespace MiView.Common.Connection.WebSocket
 
         private static void DbgOutputSocketReceived(string Response)
         {
+            System.Diagnostics.Debug.WriteLine("[DBG]");
             System.Diagnostics.Debug.WriteLine(Response);
         }
 

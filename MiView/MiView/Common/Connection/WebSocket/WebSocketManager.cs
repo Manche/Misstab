@@ -215,6 +215,7 @@ namespace MiView.Common.Connection.WebSocket
         public void CallDataRowAdded(DataGridTimeLineAddedEvent e) => DataRowsAdded?.Invoke(this, e);
         protected virtual void OnDataRowAdded(object? sender, DataGridTimeLineAddedEvent e)
         {
+            System.Diagnostics.Debug.WriteLine("ondatarowadded");
             System.Diagnostics.Debug.WriteLine(e.Container.RENOTED);
         }
         public void CallDataRejected(TimeLineContainer Container) => DataRejected?.Invoke(this, new DataContainerEventArgs());
