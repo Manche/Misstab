@@ -11,7 +11,7 @@ namespace MiView.Common.AnalyzeData.Format.Misskey.v2025
     public class Note
     {
         public JsonNode? Node {  get; set; }
-        public JsonNode? Id { get { return Node?["Id"]; } }
+        public JsonNode? Id { get { return Node?["id"]; } }
         public JsonNode? CreatedAt { get { return Node?["createdAt"]; } }
         public JsonNode? UserId { get { return Node?["userId"]; } }
         public JsonNode? UserDetail { get { return Node?["user"]; } }
