@@ -556,7 +556,14 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                                         // 通常TL
                                         try
                                         {
+
                                             DGrid.InsertTimeLineData(TLCon, out AddedRowIndex);
+                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
+                                            DGEvent.GridContainer.Add(new DataGridTimeLineUpdaterContainer() { DGrid = DGrid, RowIndex = AddedRowIndex });
+                                            DGrid.OnDataGridTimeLinePostAdded(TLCon, DGEvent);
+                                            System.Diagnostics.Debug.WriteLine(DGrid._Definition);
+                                            System.Diagnostics.Debug.WriteLine(ChannelToTimeLineData.Get(TLCon.ORIGINAL).Note.Id);
+                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
 
                                             foreach (TimeLineAlertOption Opt in DGrid._AlertAccept)
                                             {
@@ -578,13 +585,6 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                                                 }
                                             }
                                             CallDataAccepted(TLCon);
-
-                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
-                                            DGEvent.GridContainer.Add(new DataGridTimeLineUpdaterContainer() { DGrid = DGrid, RowIndex = AddedRowIndex });
-                                            DGrid.OnDataGridTimeLinePostAdded(TLCon, DGEvent);
-                                            System.Diagnostics.Debug.WriteLine(DGrid._Definition);
-                                            System.Diagnostics.Debug.WriteLine(ChannelToTimeLineData.Get(TLCon.ORIGINAL).Note.Id);
-                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
                                         }
                                         catch (Exception ce)
                                         {
@@ -647,7 +647,13 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                                         // 通常TL
                                         try
                                         {
+
                                             DGrid.InsertTimeLineData(TLCon, out AddedRowIndex);
+                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
+                                            DGrid.OnDataGridTimeLinePostAdded(TLCon, DGEvent);
+                                            System.Diagnostics.Debug.WriteLine(DGrid._Definition);
+                                            System.Diagnostics.Debug.WriteLine(ChannelToTimeLineData.Get(TLCon.ORIGINAL).Note.Id);
+                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
                                             foreach (TimeLineAlertOption Opt in DGrid._AlertAccept)
                                             {
                                                 Found = Opt._FilterOptions.FindAll(r => { return r.FilterResult(); }).Count();
@@ -669,11 +675,6 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                                             }
                                             CallDataAccepted(TLCon);
 
-                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
-                                            DGrid.OnDataGridTimeLinePostAdded(TLCon, DGEvent);
-                                            System.Diagnostics.Debug.WriteLine(DGrid._Definition);
-                                            System.Diagnostics.Debug.WriteLine(ChannelToTimeLineData.Get(TLCon.ORIGINAL).Note.Id);
-                                            System.Diagnostics.Debug.WriteLine("-----------------------------------------------------------------");
                                         }
                                         catch (Exception ce)
                                         {
