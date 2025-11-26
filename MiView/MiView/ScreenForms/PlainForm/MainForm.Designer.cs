@@ -57,6 +57,7 @@ namespace MiView
             tpNotification = new TabPage();
             tpDebug = new TabPage();
             chkMuteSound = new CheckBox();
+            chkAutoBelowScroll = new CheckBox();
             menuStrip1.SuspendLayout();
             tbMain.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -105,21 +106,21 @@ namespace MiView
             // tspWindowEvent
             // 
             tspWindowEvent.Name = "tspWindowEvent";
-            tspWindowEvent.Size = new Size(180, 22);
+            tspWindowEvent.Size = new Size(151, 22);
             tspWindowEvent.Text = "イベントビューア";
             tspWindowEvent.Click += tspWindowEvent_Click;
             // 
             // tspWindowAPI
             // 
             tspWindowAPI.Name = "tspWindowAPI";
-            tspWindowAPI.Size = new Size(180, 22);
+            tspWindowAPI.Size = new Size(151, 22);
             tspWindowAPI.Text = "APIビューア";
             tspWindowAPI.Click += tspWindowAPI_Click;
             // 
             // tspWindowStasticTimeLine
             // 
             tspWindowStasticTimeLine.Name = "tspWindowStasticTimeLine";
-            tspWindowStasticTimeLine.Size = new Size(180, 22);
+            tspWindowStasticTimeLine.Size = new Size(151, 22);
             tspWindowStasticTimeLine.Text = "タイムライン統計";
             tspWindowStasticTimeLine.Click += tspWindowStasticTimeLine_Click;
             // 
@@ -313,11 +314,23 @@ namespace MiView
             chkMuteSound.UseVisualStyleBackColor = true;
             chkMuteSound.CheckedChanged += chkMuteSound_CheckedChanged;
             // 
+            // chkAutoBelowScroll
+            // 
+            chkAutoBelowScroll.AutoSize = true;
+            chkAutoBelowScroll.Location = new Point(215, 627);
+            chkAutoBelowScroll.Name = "chkAutoBelowScroll";
+            chkAutoBelowScroll.Size = new Size(140, 19);
+            chkAutoBelowScroll.TabIndex = 10;
+            chkAutoBelowScroll.Text = "常に最新のデータを表示";
+            chkAutoBelowScroll.UseVisualStyleBackColor = true;
+            chkAutoBelowScroll.CheckedChanged += chkAutoBelowScroll_CheckedChanged;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(784, 673);
+            Controls.Add(chkAutoBelowScroll);
             Controls.Add(chkMuteSound);
             Controls.Add(pnSub);
             Controls.Add(pnMain);
@@ -374,5 +387,6 @@ namespace MiView
         private ToolStripMenuItem tspWindowAPI;
         private ToolStripMenuItem tspWindowStasticTimeLine;
         private CheckBox chkMuteSound;
+        private CheckBox chkAutoBelowScroll;
     }
 }

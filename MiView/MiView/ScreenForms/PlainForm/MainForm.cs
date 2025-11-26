@@ -972,5 +972,10 @@ namespace MiView
         {
             SettingState.Instance.IsMuted = chkMuteSound.Checked;
         }
+
+        private void chkAutoBelowScroll_CheckedChanged(object sender, EventArgs e)
+        {
+            SettingState.Instance.IsAutoBelow = chkAutoBelowScroll.Checked;
+        }
     }
 }

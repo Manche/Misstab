@@ -4,6 +4,7 @@ using MiView.Common.Connection.WebSocket;
 using MiView.Common.Fonts;
 using MiView.Common.Fonts.Material;
 using MiView.Common.Notification;
+using MiView.Common.Setting;
 using MiView.Common.TimeLine.Event;
 using MiView.Common.Util;
 using System;
@@ -934,6 +935,8 @@ namespace MiView.Common.TimeLine
             this.ReadOnly = true;
             this.AllowUserToAddRows = false;
             this.AllowUserToDeleteRows = false;
+            this.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            this.MultiSelect = false;
 
             this.SelectionChanged += OnSelectionChanged;
             this._DataGridTimeLineAdded += OnDataGridTimeLinePostAdded;
@@ -1121,7 +1124,6 @@ namespace MiView.Common.TimeLine
 
         public void OnSelectionChanged (object? sender, EventArgs e)
         {
-            this._IsBelowPosition = this.CurrentCell.RowIndex == this.Rows.Count - 1;
         }
 
         private static int _cntGlobal = 0;
@@ -1188,15 +1190,9 @@ namespace MiView.Common.TimeLine
                     // 基本行高さ
                     this.Rows[CurrentRowIndex].Height = 20;
 
-                    if (this._IsBelowPosition)
+                    if (SettingState.Instance.IsAutoBelow)
                     {
-                        try
-                        {
-                            this.FirstDisplayedScrollingRowIndex = CurrentRowIndex;
-                        }
-                        catch
-                        {
-                        }
+                        SendToBelow(CurrentRowIndex);
                     }
                 }
 
@@ -1269,6 +1265,21 @@ namespace MiView.Common.TimeLine
             }
             //System.Diagnostics.Debug.WriteLine("ttt");
             //this.Refresh();
+        }
+        private void SendToBelow(int RowIndex)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(SendToBelow, RowIndex);
+            }
+            try
+            {
+                this.FirstDisplayedScrollingRowIndex = RowIndex;
+                this.Rows[this.RowCount-1].Cells[(int)TIMELINE_ELEMENT.USERNAME].Selected = true;
+            }
+            catch
+            {
+            }
         }
 
 

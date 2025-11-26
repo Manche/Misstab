@@ -11,6 +11,7 @@ namespace MiView.Common.Setting
         public static SettingState Instance { get; } = new SettingState();
 
         public bool IsMuted { get; set; } = false;
+        public bool IsAutoBelow { get; set; } = false;
 
         // public EventHandler MuteChanged;
     }
