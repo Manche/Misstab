@@ -129,10 +129,67 @@ namespace MiView
                 }
                 System.Diagnostics.Debug.WriteLine(tp.Name);
             }
+
+            _ = Task.Run(async () =>
+            {
+                while(true)
+                {
+                    await Task.Delay(1000 * 60);
+                    await AutoConfigDmp();
+                }
+            });
+
             Splash.instance.SetMessageAndProgress("ç≈èIèàóù", 100);
 
             SettingState.Instance.IsMuted = false;
             Splash.instance.CloseForm();
+        }
+
+        private async Task AutoConfigDmp()
+        {
+            try
+            {
+                var n = this._WSManager.ToArray<WebSocketManager>()
+                                       .Select(r => { return SettingWebSocket.ConvertWebSocketManagerToSettingObj(r); })
+                                       .ToArray();
+                SettingController.SaveWebSockets_dmp(n);
+                //var j = this.DGrids.ToArray()
+                //                   .Select(r => { return SettingTimeLine.ConvertDataGridTimeLineToSettingObj(r); })
+                //                   .ToArray();
+                //var j = this.timeline
+                var j = this._TmpTLManager.ToArray()
+                                          .Select(r => { return SettingTimeLine.ConvertDataGridTimeLineToSettingObj(_TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, r.Key)); })
+                                          .ToArray();
+                SettingController.SaveTimeLine_dmp(j);
+
+                var MainGrid = _TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, "Main");
+                System.Diagnostics.Debug.WriteLine("Main");
+                foreach (TimeLineAlertOption AlertOption in MainGrid._AlertOptions)
+                {
+                    SettingController.SaveAlertNotification_dmp("Main" + AlertOption.AlertDefinition, AlertOption._AlertExecution);
+                }
+
+                foreach (TabPage tp in this.tbMain.TabPages)
+                {
+                    try
+                    {
+                        var tpGrid = _TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, tp.Name);
+                        foreach (TimeLineAlertOption AlertOption in tpGrid._AlertOptions)
+                        {
+                            SettingController.SaveAlertNotification_dmp(tp.Name + AlertOption.AlertDefinition, AlertOption._AlertExecution);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
+                    System.Diagnostics.Debug.WriteLine(tp.Name);
+                }
+                // SettingController.SaveAlert();
+            }
+            catch
+            {
+            }
         }
 
         private void ConnectWatcher()

@@ -11,6 +11,7 @@ namespace MiView.Common.Setting
 {
     public class SettingWebSocket
     {
+        public string LastUpdated { get; set; } = DateTime.Now.ToString();
         /// <summary>
         /// TimeLine識別設定値
         /// </summary>

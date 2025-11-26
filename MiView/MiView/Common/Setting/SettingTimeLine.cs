@@ -10,6 +10,7 @@ namespace MiView.Common.Setting
 {
     public class SettingTimeLine
     {
+        public string LastUpdated { get; set; } = DateTime.Now.ToString();
         public required string Definition { get; set; }
         public required string TabName { get; set; }
         public bool FilterMode { get; set; } = true;

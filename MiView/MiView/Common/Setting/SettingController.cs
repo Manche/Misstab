@@ -53,6 +53,13 @@ namespace MiView.Common.Setting
             string json = JsonSerializer.Serialize(config, options);
             File.WriteAllText(SettingConst.WEBSOCKET_SETTINGS_FILE, json);
         }
+
+        public static void SaveWebSockets_dmp(SettingWebSocket[] config)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string json = JsonSerializer.Serialize(config, options);
+            File.WriteAllText(SettingConst.WEBSOCKET_SETTINGS_TMP_FILE, json);
+        }
         #endregion
         #region TimeLine
         public static SettingTimeLine[] LoadTimeLine()
@@ -78,17 +85,15 @@ namespace MiView.Common.Setting
             string json = JsonSerializer.Serialize(config, options);
             File.WriteAllText(SettingConst.TIMELINE_SETTINGS_FILE, json);
         }
-        #endregion
-        #region Alert
 
-        public static void SaveAlertNotification(string Definition, List<NotificationController> config)
+        public static void SaveTimeLine_dmp(SettingTimeLine[] config)
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
-            string json = JsonSerializer.Serialize(config.Select(r => { return (object)r; }), options);
-            SettingConst.SettingDirCheck();
-            File.WriteAllText(SettingConst.ALERT_NOTIFICATION_SETTINGS_FILE_NAME(Definition), json);
+            string json = JsonSerializer.Serialize(config, options);
+            File.WriteAllText(SettingConst.TIMELINE_SETTINGS_TMP_FILE, json);
         }
-
+        #endregion
+        #region Alert
         public static List<NotificationController> LoadAlertNotification(string Definition)
         {
             if (!File.Exists(SettingConst.ALERT_NOTIFICATION_SETTINGS_FILE_NAME(Definition)))
@@ -171,6 +176,23 @@ namespace MiView.Common.Setting
                 return new List<NotificationController>();
             }
         }
+
+        public static void SaveAlertNotification(string Definition, List<NotificationController> config)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string json = JsonSerializer.Serialize(config.Select(r => { return (object)r; }), options);
+            SettingConst.SettingDirCheck();
+            File.WriteAllText(SettingConst.ALERT_NOTIFICATION_SETTINGS_FILE_NAME(Definition), json);
+        }
+
+
+        public static void SaveAlertNotification_dmp(string Definition, List<NotificationController> config)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string json = JsonSerializer.Serialize(config.Select(r => { return (object)r; }), options);
+            SettingConst.SettingDirCheck();
+            File.WriteAllText(SettingConst.ALERT_NOTIFICATION_SETTINGS_TMP_FILE_NAME(Definition), json);
+        }
         #endregion
 
         #region Debug関連
@@ -215,14 +237,17 @@ namespace MiView.Common.Setting
         /// websocket
         /// </summary>
         public static readonly string WEBSOCKET_SETTINGS_FILE = Path.Combine(SETTINGS_DIR, "settings_websocket.json");
+        public static readonly string WEBSOCKET_SETTINGS_TMP_FILE = Path.Combine(SETTINGS_DIR, "settings_websocket_tmp.json");
         /// <summary>
         /// timeline
         /// </summary>
         public static readonly string TIMELINE_SETTINGS_FILE = Path.Combine(SETTINGS_DIR, "settings_timeline.json");
+        public static readonly string TIMELINE_SETTINGS_TMP_FILE = Path.Combine(SETTINGS_DIR, "settings_timeline_tmp.json");
         /// <summary>
         /// フィルタ
         /// </summary>
         public static readonly string FILTER_SETTINGS_FILE = Path.Combine(SETTINGS_DIR, "settings_filter.json");
+        public static readonly string FILTER_SETTINGS_TMP_FILE = Path.Combine(SETTINGS_DIR, "settings_filter_tmp.json");
         /// <summary>
         /// デバッグ情報
         /// </summary>
@@ -231,14 +256,21 @@ namespace MiView.Common.Setting
         /// アラート
         /// </summary>
         public static readonly string ALERT_SETTINGS_FILE_FRONT = Path.Combine(SETTINGS_DIR, "settings_alert_");
+        public static readonly string ALERT_SETTINGS_TMP_FILE_FRONT = Path.Combine(SETTINGS_DIR, "settings_alert_tmp_");
         public static readonly string ALERT_SETTINGS_EXTENSION = ".json";
         public static string ALERT_SETTINGS_FILE_NAME(string Name) { return Path.Combine(ALERT_SETTINGS_FILE_FRONT + Name + ALERT_SETTINGS_EXTENSION); }
+        public static string ALERT_SETTINGS_TMP_FILE_NAME(string Name) { return Path.Combine(ALERT_SETTINGS_TMP_FILE_FRONT + Name + ALERT_SETTINGS_EXTENSION); }
 
         public static readonly string ALERT_NOTIFICATION_SETTINGS_FILE_FRONT = Path.Combine(SETTINGS_DIR + NOTIFICATION_DIR, "settings_alert_notification_");
+        public static readonly string ALERT_NOTIFICATION_SETTINGS_TMP_FILE_FRONT = Path.Combine(SETTINGS_DIR + NOTIFICATION_DIR, "settings_alert_notification_tmp_");
         public static readonly string ALERT_NOTIFICATION_SETTINGS_EXTENSION = ".json";
         public static string ALERT_NOTIFICATION_SETTINGS_FILE_NAME(string Name)
         {
             return Path.Combine(ALERT_NOTIFICATION_SETTINGS_FILE_FRONT + Name + ALERT_NOTIFICATION_SETTINGS_EXTENSION);
+        }
+        public static string ALERT_NOTIFICATION_SETTINGS_TMP_FILE_NAME(string Name)
+        {
+            return Path.Combine(ALERT_NOTIFICATION_SETTINGS_TMP_FILE_FRONT + Name + ALERT_NOTIFICATION_SETTINGS_EXTENSION);
         }
 
         // 以下逐一更新
