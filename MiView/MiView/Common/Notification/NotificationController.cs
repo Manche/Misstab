@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace MiView.Common.Notification
 {
@@ -50,6 +51,9 @@ namespace MiView.Common.Notification
             Shell,
             Toast,
             NotificationSound,
+
+            LogWrite,
+            DataBase
         }
         public static Dictionary<CONTROLLER_KIND, string> ControllerKindName = new Dictionary<CONTROLLER_KIND, string>()
         {
@@ -183,6 +187,67 @@ namespace MiView.Common.Notification
             }
 
             return StrInput;
+        }
+
+        public object? GetPropValue(string PropKey)
+        {
+            PropertyInfo[] PropInfos = typeof(TimeLineContainer).GetProperties();
+            PropInfos = PropInfos.Where(p => { return p.Name == PropKey; }).ToArray();
+            if (PropInfos.Length == 0)
+            {
+                return null;
+            }
+            return PropInfos[0].GetValue(this._Container);
+        }
+    }
+
+    public class NotificationConst
+    {
+        public const string YMDFormat = "yyyyMMdd";
+        public const string YMDFormat_EN = "yyyy/MM/dd";
+        public const string YMDFormat_JP = "yyyy年MM月dd日";
+        public const string YMDHMSFormat = "yyyyMMddhhmmss";
+        public const string YMDHMSFormat_EN = "yyyy/MM/dd hh:mm:ss";
+        public const string YMDHMSFormat_JP = "yyyy年MM月dd日 hh時mm分ss秒";
+        public const string HMSFormat = "hhmmss";
+        public const string HMSFormat_EN = "hh:mm:ss";
+        public const string HMSFormat_JP = "hh時mm分ss秒";
+        private static Dictionary<string, string> _YMDHMSConvertList = new Dictionary<string, string>()
+        {
+            {"YMDFormat", YMDFormat },
+            {"YMDFormat_EN", YMDFormat_EN },
+            {"YMDFormat_JP", YMDFormat_JP },
+            {"YMDHMSFormat", YMDHMSFormat },
+            {"YMDHMSFormat_EN", YMDHMSFormat_EN },
+            {"YMDHMSFormat_JP", YMDHMSFormat_JP },
+            {"HMSFormat", HMSFormat },
+            {"HMSFormat_EN", HMSFormat_EN },
+            {"HMSFormat_JP", HMSFormat_JP }
+        };
+        public static string FormatYMD(DateTime DateValue, string Str)
+        {
+            foreach (KeyValuePair<string, string> KV in _YMDHMSConvertList)
+            {
+                string Ptn = @"\[" + KV.Key + @"\]"; // [～] の中身をキャプチャ
+                string Rs = Regex.Replace(Str, Ptn, match =>
+                {
+                    string k = match.Groups[1].Value; // [NAME] → "NAME"
+
+                    if (k == KV.Key)
+                    {
+                        try
+                        {
+                            return DateValue.ToString(KV.Value);
+                        }
+                        catch
+                        {
+                            return "ERR";
+                        }
+                    }
+                    return match.Value;
+                });
+            }
+            return Str;
         }
     }
 }

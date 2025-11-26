@@ -92,6 +92,7 @@
     <Folder Include="Common\Assets\Images\Icon\" />
     <Folder Include="Common\Connection\REST\Misskey\v2025\API\Channels\" />
     <Folder Include="Common\Connection\WebSocket\Misskey\v11\" />
+    <Folder Include="Common\Notification\Connector\Database\" />
   </ItemGroup>
 
   <ItemGroup>
