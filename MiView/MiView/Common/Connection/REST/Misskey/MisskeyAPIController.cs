@@ -110,6 +110,7 @@ namespace MiView.Common.Connection.REST.Misskey
         public enum API_ENDPOINT
         {
             NOTES_TIMELINE = 0,
+            NOTES
         }
 
         public static bool RequiredBearer (API_ENDPOINT EndPoint)
@@ -117,6 +118,7 @@ namespace MiView.Common.Connection.REST.Misskey
             switch (EndPoint)
             {
                 case API_ENDPOINT.NOTES_TIMELINE: return true;
+                case API_ENDPOINT.NOTES: return true;
                 default: return false;
             }
         }
@@ -126,6 +128,7 @@ namespace MiView.Common.Connection.REST.Misskey
             switch (EndPoint)
             {
                 case API_ENDPOINT.NOTES_TIMELINE: return APIPrefix + "/notes/timeline";
+                case API_ENDPOINT.NOTES: return APIPrefix + "/notes/show";
                 default: throw new NotImplementedException("NotImplemented");
             }
         }
@@ -135,6 +138,7 @@ namespace MiView.Common.Connection.REST.Misskey
             switch (EndPoint)
             {
                 case API_ENDPOINT.NOTES_TIMELINE:
+                case API_ENDPOINT.NOTES:
                     return HttpRequestController.EXECUTE_PROCESS.POST;
                 default:
                     throw new NotImplementedException("NotImplemented");
@@ -146,6 +150,7 @@ namespace MiView.Common.Connection.REST.Misskey
             switch (EndPoint)
             {
                 case API_ENDPOINT.NOTES_TIMELINE: return new Misskey.v2025.API.Notes.TimeLine();
+                case API_ENDPOINT.NOTES: return new Misskey.v2025.API.Notes.Notes();
                 default: throw new NotImplementedException("notimplemented");
             }
         }

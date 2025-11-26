@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic.Logging;
 using MiView.Common.AnalyzeData;
 using MiView.Common.AnalyzeData.Format.Misskey.v2025;
+using MiView.Common.Connection.REST.Misskey;
 using MiView.Common.Connection.VersionInfo;
 using MiView.Common.Connection.WebSocket.Controller;
 using MiView.Common.Connection.WebSocket.Event;
@@ -15,6 +16,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using ChannelToTimeLineContainer = MiView.Common.AnalyzeData.Format.Misskey.v2025.ChannelToTimeLineContainer;
 
 namespace MiView.Common.Connection.WebSocket.Misskey.v2025
@@ -491,12 +493,19 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
                 // データ受信不可能の場合
                 return;
             }
+            _IsOpenTimeLine = true;
+            ParseJsonMessageTimeLine(e.MessageRaw);
+        }
+
+        /// <summary>
+        /// メッセージParse
+        /// </summary>
+        /// <param name="JsonMsg"></param>
+        private void ParseJsonMessageTimeLine(string JsonMsg)
+        {
             try
             {
-
-                _IsOpenTimeLine = true;
-                dynamic Res = System.Text.Json.JsonDocument.Parse(e.MessageRaw);
-                var t = JsonNode.Parse(e.MessageRaw);
+                var t = JsonNode.Parse(JsonMsg);
 
                 //System.Diagnostics.Debug.WriteLine(t);
 
@@ -715,10 +724,34 @@ namespace MiView.Common.Connection.WebSocket.Misskey.v2025
             catch (Exception q)
             {
                 System.Diagnostics.Debug.WriteLine("[DG]");
-                System.Diagnostics.Debug.WriteLine(e.MessageRaw);
+                System.Diagnostics.Debug.WriteLine(JsonMsg);
                 System.Diagnostics.Debug.WriteLine(q.StackTrace);
+
+
+                // 今のところpending
+                // 再取得チャレンジ
+                //if (Regex.IsMatch(JsonMsg, "(\"uri\")(:)(\"(.+?)\")"))
+                //{
+                //    MisskeyAPIController Cnt = MisskeyAPIController.CreateInstance(MisskeyAPIConst.API_ENDPOINT.NOTES);
+                //    Cnt.Request(this._HostDefinition, this.APIKey, new JsonObject() { new KeyValuePair<string, JsonNode?>("noteId", Regex.Replace(JsonMsg, "(\"uri\")(:)(\"(.+?)\")", "$4")) }, null);
+                //    var rm = Cnt.GetNotes();
+
+                //    System.Diagnostics.Debug.WriteLine("b------------------------");
+                //    System.Diagnostics.Debug.WriteLine(rm);
+                //    System.Diagnostics.Debug.WriteLine("------------------------");
+                //}
+                //if (Regex.IsMatch(JsonMsg, "\"type\"\\s*:\\s*\"note\".*?\"id\"\\s*:\\s*\"([^\"]+)\""))
+                //{
+                //    MisskeyAPIController Cnt = MisskeyAPIController.CreateInstance(MisskeyAPIConst.API_ENDPOINT.NOTES);
+                //    Cnt.Request(this._HostDefinition, this.APIKey, new JsonObject { ["noteId"] = Regex.Match(JsonMsg, "\"type\"\\s*:\\s*\"note\".*?\"id\"\\s*:\\s*\"([^\"]+)\"").Groups[1].Value }, null);
+                //    var rm = Cnt.GetNotes();
+                //    System.Diagnostics.Debug.WriteLine("f------------------------");
+                //    System.Diagnostics.Debug.WriteLine(rm);
+                //    System.Diagnostics.Debug.WriteLine("------------------------");
+                //}
             }
         }
+
         // WebSocketTimeLineCommon クラス内に追加
         protected override void OnReconnected(string host)
         {
