@@ -1445,7 +1445,8 @@ namespace MiView.Common.TimeLine
         {
             if (Container.RENOTED)
             {
-                this.ChangeDispFgColorCommon(ref Row, Color.Green);
+                // this.ChangeDispFgColorCommon(ref Row, Color.Green);
+                this.ChangeDispBgColorCommon(ref Row, Color.LightGreen);
             }
             if (Container.REPLAYED)
             {
