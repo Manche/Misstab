@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Notification.Baloon
+namespace Misstab.Common.Notification.Baloon
 {
     public partial class BaloonControlForm : NotificationControlForm
     {

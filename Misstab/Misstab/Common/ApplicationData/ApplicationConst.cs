@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.ApplicationData
+namespace Misstab.Common.ApplicationData
 {
     public class ApplicationConst
     {
@@ -14,6 +14,6 @@ namespace MiView.Common.ApplicationData
         /// <remarks>
         /// 基本的にこの名前を外部向けに使う
         /// </remarks>
-        public const string ApplicationLogicalName = "MiView";
+        public const string ApplicationLogicalName = "Misstab";
     }
 }

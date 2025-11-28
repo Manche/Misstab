@@ -1,14 +1,14 @@
 ﻿using Microsoft.VisualBasic.Logging;
-using MiView.Common.AnalyzeData;
-using MiView.Common.AnalyzeData.Format.Misskey.v2025;
-using MiView.Common.Connection.REST.Misskey;
-using MiView.Common.Connection.VersionInfo;
-using MiView.Common.Connection.WebSocket.Controller;
-using MiView.Common.Connection.WebSocket.Event;
-using MiView.Common.Connection.WebSocket.Structures;
-using MiView.Common.TimeLine;
-using MiView.Common.TimeLine.Event;
-using MiView.Common.Util;
+using Misstab.Common.AnalyzeData;
+using Misstab.Common.AnalyzeData.Format.Misskey.v2025;
+using Misstab.Common.Connection.REST.Misskey;
+using Misstab.Common.Connection.VersionInfo;
+using Misstab.Common.Connection.WebSocket.Controller;
+using Misstab.Common.Connection.WebSocket.Event;
+using Misstab.Common.Connection.WebSocket.Structures;
+using Misstab.Common.TimeLine;
+using Misstab.Common.TimeLine.Event;
+using Misstab.Common.Util;
 using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Reflection.Metadata.Ecma335;
@@ -17,9 +17,9 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
-using ChannelToTimeLineContainer = MiView.Common.AnalyzeData.Format.Misskey.v2025.ChannelToTimeLineContainer;
+using ChannelToTimeLineContainer = Misstab.Common.AnalyzeData.Format.Misskey.v2025.ChannelToTimeLineContainer;
 
-namespace MiView.Common.Connection.WebSocket.Misskey.v2025
+namespace Misstab.Common.Connection.WebSocket.Misskey.v2025
 {
     abstract class WebSocketTimeLineCommon : WebSocketManager
     {

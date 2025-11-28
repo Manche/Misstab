@@ -1,4 +1,4 @@
-namespace MiViewProxyServer
+namespace MisstabProxyServer
 {
     internal static class Program
     {

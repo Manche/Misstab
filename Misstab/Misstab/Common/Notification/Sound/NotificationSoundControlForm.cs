@@ -1,4 +1,4 @@
-﻿using MiView.Common.Notification.Baloon;
+﻿using Misstab.Common.Notification.Baloon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace MiView.Common.Notification.Sound
+namespace Misstab.Common.Notification.Sound
 {
     public partial class NotificationSoundControlForm : NotificationControlForm
     {

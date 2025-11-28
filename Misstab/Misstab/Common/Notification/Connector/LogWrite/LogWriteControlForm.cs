@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Notification.Connector.LogWrite
+namespace Misstab.Common.Notification.Connector.LogWrite
 {
     public partial class LogWriteControlForm : NotificationConnectorControlForm
     {

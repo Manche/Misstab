@@ -1,12 +1,12 @@
-﻿using MiView.Common.AnalyzeData;
-using MiView.Common.Connection.VersionInfo;
-using MiView.Common.Connection.WebSocket;
-using MiView.Common.Fonts;
-using MiView.Common.Fonts.Material;
-using MiView.Common.Notification;
-using MiView.Common.Setting;
-using MiView.Common.TimeLine.Event;
-using MiView.Common.Util;
+﻿using Misstab.Common.AnalyzeData;
+using Misstab.Common.Connection.VersionInfo;
+using Misstab.Common.Connection.WebSocket;
+using Misstab.Common.Fonts;
+using Misstab.Common.Fonts.Material;
+using Misstab.Common.Notification;
+using Misstab.Common.Setting;
+using Misstab.Common.TimeLine.Event;
+using Misstab.Common.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,11 +22,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using static MiView.Common.TimeLine.TimeLineCreator;
+using static Misstab.Common.TimeLine.TimeLineCreator;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
-namespace MiView.Common.TimeLine
+namespace Misstab.Common.TimeLine
 {
     /// <summary>
     /// タイムラインコンテナ作成・識別
@@ -434,9 +434,9 @@ namespace MiView.Common.TimeLine
                 PROTECTED = TimeLineContainer.PROTECTED_STATUS.Direct,
                 ISLOCAL = true,
                 DETAIL = "これはデバッグ実行時に表示されます。",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault,
             }, out _);
@@ -446,9 +446,9 @@ namespace MiView.Common.TimeLine
                 ISLOCAL = true,
                 RENOTED = true,
                 DETAIL = "リノート表示。",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -459,9 +459,9 @@ namespace MiView.Common.TimeLine
                 RENOTED = false,
                 REPLAYED = true,
                 DETAIL = "リプライ表示。",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -474,9 +474,9 @@ namespace MiView.Common.TimeLine
                 ISCHANNEL = true,
                 CHANNEL_NAME = "test",
                 DETAIL = "チャンネル表示。",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -488,9 +488,9 @@ namespace MiView.Common.TimeLine
                 REPLAYED = true,
                 CW = true,
                 DETAIL = "CW",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -502,9 +502,9 @@ namespace MiView.Common.TimeLine
                 REPLAYED = true,
                 CW = true,
                 DETAIL = "ごった煮",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -514,9 +514,9 @@ namespace MiView.Common.TimeLine
                 ISLOCAL = true,
                 RENOTED = false,
                 DETAIL = "パブリック",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -526,9 +526,9 @@ namespace MiView.Common.TimeLine
                 ISLOCAL = true,
                 RENOTED = false,
                 DETAIL = "セミパブリック",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -538,9 +538,9 @@ namespace MiView.Common.TimeLine
                 ISLOCAL = true,
                 RENOTED = false,
                 DETAIL = "ホーム",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -550,9 +550,9 @@ namespace MiView.Common.TimeLine
                 ISLOCAL = true,
                 RENOTED = false,
                 DETAIL = "フォロワー",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -562,9 +562,9 @@ namespace MiView.Common.TimeLine
                 ISLOCAL = true,
                 RENOTED = false,
                 DETAIL = "ダイレクトメッセージ",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -574,9 +574,9 @@ namespace MiView.Common.TimeLine
                 ISLOCAL = false,
                 RENOTED = false,
                 DETAIL = "abcdefghijklmnopqrstuvwxyz",
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);
@@ -586,9 +586,9 @@ namespace MiView.Common.TimeLine
                 ISLOCAL = false,
                 RENOTED = false,
                 DETAIL = "abcdefghijklmnopqrstuvwxyz".ToUpper(),
-                USERID = "MiVIEW-SYSTEM",
+                USERID = "Misstab-SYSTEM",
                 USERNAME = "アプリ",
-                SOFTWARE = "MiView 0.0.1",
+                SOFTWARE = "Misstab 0.0.1",
                 SOURCE = "localhost",
                 UPDATEDAT = UpdDefault
             }, out _);

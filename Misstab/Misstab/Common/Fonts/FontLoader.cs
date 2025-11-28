@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
 
-namespace MiView.Common.Fonts
+namespace Misstab.Common.Fonts
 {
     internal sealed class FontLoader
     {

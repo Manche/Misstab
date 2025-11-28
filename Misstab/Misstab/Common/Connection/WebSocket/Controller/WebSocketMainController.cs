@@ -1,12 +1,12 @@
-﻿using MiView.Common.Connection.VersionInfo;
-using MiView.Common.Connection.WebSocket.Misskey.v2025;
+﻿using Misstab.Common.Connection.VersionInfo;
+using Misstab.Common.Connection.WebSocket.Misskey.v2025;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Connection.WebSocket.Controller
+namespace Misstab.Common.Connection.WebSocket.Controller
 {
     internal class WebSocketMainController
     {

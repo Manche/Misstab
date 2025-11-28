@@ -1,6 +1,6 @@
-﻿using MiView.Common.Connection.WebSocket;
-using MiView.Common.TimeLine;
-using MiView.ScreenForms.DialogForm.Event;
+﻿using Misstab.Common.Connection.WebSocket;
+using Misstab.Common.TimeLine;
+using Misstab.ScreenForms.DialogForm.Event;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MiView.ScreenForms.DialogForm.Setting
+namespace Misstab.ScreenForms.DialogForm.Setting
 {
     public partial class APISetting : Form
     {

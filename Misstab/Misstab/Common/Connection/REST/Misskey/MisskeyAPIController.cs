@@ -1,6 +1,6 @@
-﻿using MiView.Common.AnalyzeData.Format.Misskey.v2025.API;
-using MiView.Common.Connection.VersionInfo;
-using MiView.Common.Notification.Http;
+﻿using Misstab.Common.AnalyzeData.Format.Misskey.v2025.API;
+using Misstab.Common.Connection.VersionInfo;
+using Misstab.Common.Notification.Http;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -12,7 +12,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace MiView.Common.Connection.REST.Misskey
+namespace Misstab.Common.Connection.REST.Misskey
 {
     public class MisskeyAPIController
     {

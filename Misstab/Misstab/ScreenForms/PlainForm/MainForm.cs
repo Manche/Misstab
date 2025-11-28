@@ -1,24 +1,24 @@
-using MiView.Common.AnalyzeData;
-using MiView.Common.Connection.REST.Misskey;
-using MiView.Common.Connection.REST.Misskey.v2025.API.Notes;
-using MiView.Common.Connection.VersionInfo;
-using MiView.Common.Connection.WebSocket;
-using MiView.Common.Connection.WebSocket.Controller;
-using MiView.Common.Connection.WebSocket.Event;
-using MiView.Common.Connection.WebSocket.Misskey.v2025;
-using MiView.Common.Fonts;
-using MiView.Common.Fonts.Material;
-using MiView.Common.Notification.Baloon;
-using MiView.Common.Notification.Http;
-using MiView.Common.Notification.Toast;
-using MiView.Common.Setting;
-using MiView.Common.TimeLine;
-using MiView.ScreenForms.Controls.Combo;
-using MiView.ScreenForms.Controls.Notify;
-using MiView.ScreenForms.DialogForm;
-using MiView.ScreenForms.DialogForm.Event;
-using MiView.ScreenForms.DialogForm.Setting;
-using MiView.ScreenForms.DialogForm.Viewer;
+using Misstab.Common.AnalyzeData;
+using Misstab.Common.Connection.REST.Misskey;
+using Misstab.Common.Connection.REST.Misskey.v2025.API.Notes;
+using Misstab.Common.Connection.VersionInfo;
+using Misstab.Common.Connection.WebSocket;
+using Misstab.Common.Connection.WebSocket.Controller;
+using Misstab.Common.Connection.WebSocket.Event;
+using Misstab.Common.Connection.WebSocket.Misskey.v2025;
+using Misstab.Common.Fonts;
+using Misstab.Common.Fonts.Material;
+using Misstab.Common.Notification.Baloon;
+using Misstab.Common.Notification.Http;
+using Misstab.Common.Notification.Toast;
+using Misstab.Common.Setting;
+using Misstab.Common.TimeLine;
+using Misstab.ScreenForms.Controls.Combo;
+using Misstab.ScreenForms.Controls.Notify;
+using Misstab.ScreenForms.DialogForm;
+using Misstab.ScreenForms.DialogForm.Event;
+using Misstab.ScreenForms.DialogForm.Setting;
+using Misstab.ScreenForms.DialogForm.Viewer;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -30,7 +30,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Windows.Forms;
 
-namespace MiView
+namespace Misstab
 {
     public partial class MainForm : Form
     {

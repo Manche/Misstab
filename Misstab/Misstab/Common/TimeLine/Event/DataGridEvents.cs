@@ -1,11 +1,11 @@
-﻿using MiView.Common.Connection.WebSocket;
+﻿using Misstab.Common.Connection.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.TimeLine.Event
+namespace Misstab.Common.TimeLine.Event
 {
     public class DataGridTimeLineAddedEvent : EventArgs
     {

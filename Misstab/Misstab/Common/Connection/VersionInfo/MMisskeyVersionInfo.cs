@@ -1,4 +1,4 @@
-﻿using MiView.Common.Connection.REST.Constraint;
+﻿using Misstab.Common.Connection.REST.Constraint;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Connection.VersionInfo
+namespace Misstab.Common.Connection.VersionInfo
 {
     public class MMisskeyVersionInfo : CSoftwareVersionInfo
     {

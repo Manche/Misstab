@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MiView.ScreenForms.DialogForm
+namespace Misstab.ScreenForms.DialogForm
 {
     public partial class Splash : Form
     {

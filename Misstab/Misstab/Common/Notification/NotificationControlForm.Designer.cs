@@ -1,4 +1,4 @@
-﻿namespace MiView.Common.Notification
+﻿namespace Misstab.Common.Notification
 {
     partial class NotificationControlForm
     {

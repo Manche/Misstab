@@ -1,6 +1,6 @@
-﻿using MiView.Common.AnalyzeData.Format.Misskey.v2025;
-using MiView.Common.TimeLine;
-using MiView.Common.TimeLine.Event;
+﻿using Misstab.Common.AnalyzeData.Format.Misskey.v2025;
+using Misstab.Common.TimeLine;
+using Misstab.Common.TimeLine.Event;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace MiView.Common.AnalyzeData
+namespace Misstab.Common.AnalyzeData
 {
     /// <summary>
     /// チャンネルレスポンス→タイムライン用データ

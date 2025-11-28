@@ -1,12 +1,12 @@
-﻿using MiView.Common.Connection.WebSocket;
-using MiView.Common.TimeLine;
+﻿using Misstab.Common.Connection.WebSocket;
+using Misstab.Common.TimeLine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.ScreenForms.DialogForm.Event
+namespace Misstab.ScreenForms.DialogForm.Event
 {
     public class SettingChangeEventArgs: EventArgs
     {

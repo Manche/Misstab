@@ -1,6 +1,6 @@
-﻿using MiView.Common.TimeLine;
+﻿using Misstab.Common.TimeLine;
 
-namespace MiView
+namespace Misstab
 {
     partial class MainForm
     {
@@ -342,7 +342,7 @@ namespace MiView
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "MainForm";
-            Text = "MiView - MainForm";
+            Text = "Misstab - MainForm";
             FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
             menuStrip1.ResumeLayout(false);

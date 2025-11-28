@@ -1,5 +1,5 @@
-﻿using MiView.Common.ApplicationData;
-using MiView.Common.Setting;
+﻿using Misstab.Common.ApplicationData;
+using Misstab.Common.Setting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Util
+namespace Misstab.Common.Util
 {
     public static class LogOutput
     {
@@ -62,6 +62,6 @@ namespace MiView.Common.Util
         /// <summary>
         /// 設定ディレクトリ
         /// </summary>
-        public static readonly string LOG_DIR = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MiView");
+        public static readonly string LOG_DIR = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Misstab");
     }
 }

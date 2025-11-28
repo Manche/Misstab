@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace MiView.Common.Connection.WebSocket.Structures
+namespace Misstab.Common.Connection.WebSocket.Structures
 {
     /// <summary>
     /// main structure

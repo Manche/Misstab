@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace MiView.Common.AnalyzeData
+namespace Misstab.Common.AnalyzeData
 {
     internal class JsonConverterCommon
     {

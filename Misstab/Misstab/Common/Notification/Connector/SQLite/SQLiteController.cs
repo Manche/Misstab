@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Notification.Connector.SQLite
+namespace Misstab.Common.Notification.Connector.SQLite
 {
     internal class SQLiteController : NotificationConnectorController
     {

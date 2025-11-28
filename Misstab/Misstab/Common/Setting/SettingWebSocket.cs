@@ -1,13 +1,13 @@
-﻿using MiView.Common.Connection.VersionInfo;
-using MiView.Common.Connection.WebSocket;
-using MiView.Common.TimeLine;
+﻿using Misstab.Common.Connection.VersionInfo;
+using Misstab.Common.Connection.WebSocket;
+using Misstab.Common.TimeLine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Setting
+namespace Misstab.Common.Setting
 {
     public class SettingWebSocket
     {

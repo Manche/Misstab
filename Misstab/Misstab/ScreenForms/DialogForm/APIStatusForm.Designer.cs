@@ -1,4 +1,4 @@
-﻿namespace MiView.ScreenForms.DialogForm
+﻿namespace Misstab.ScreenForms.DialogForm
 {
     partial class APIStatusForm
     {

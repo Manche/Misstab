@@ -1,6 +1,6 @@
-using MiViewProxyServer.WebSocket;
+using MisstabProxyServer.WebSocket;
 
-namespace MiViewProxyServer
+namespace MisstabProxyServer
 {
     public partial class Form1 : Form
     {

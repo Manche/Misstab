@@ -1,4 +1,4 @@
-﻿namespace MiViewProxyServer.ScreenForms
+﻿namespace MisstabProxyServer.ScreenForms
 {
     partial class WebSocketControlForm
     {

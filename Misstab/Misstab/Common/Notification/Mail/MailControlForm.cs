@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Notification.Mail
+namespace Misstab.Common.Notification.Mail
 {
     public partial class MailControlForm : NotificationControlForm
     {

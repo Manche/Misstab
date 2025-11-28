@@ -1,11 +1,11 @@
-﻿using MiView.Common.Notification.Baloon;
+﻿using Misstab.Common.Notification.Baloon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Notification.Mail
+namespace Misstab.Common.Notification.Mail
 {
     /// <summary>
     /// メール通知コントローラ

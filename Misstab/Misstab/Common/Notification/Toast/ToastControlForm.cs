@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Notification.Toast
+namespace Misstab.Common.Notification.Toast
 {
     public partial class ToastControlForm : NotificationControlForm
     {

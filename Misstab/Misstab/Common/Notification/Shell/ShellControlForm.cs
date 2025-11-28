@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Notification.Shell
+namespace Misstab.Common.Notification.Shell
 {
     public partial class ShellControlForm : NotificationControlForm
     {

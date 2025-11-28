@@ -1,4 +1,4 @@
-﻿using MiView.Common.Notification;
+﻿using Misstab.Common.Notification;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MiView.ScreenForms.DialogForm.Setting
+namespace Misstab.ScreenForms.DialogForm.Setting
 {
     public partial class TimeLineAlertNotificationCreateForm : Form
     {

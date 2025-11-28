@@ -1,4 +1,4 @@
-﻿namespace MiViewProxyServer
+﻿namespace MisstabProxyServer
 {
     partial class Form1
     {

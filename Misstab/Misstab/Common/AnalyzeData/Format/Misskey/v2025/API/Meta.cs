@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace MiView.Common.AnalyzeData.Format.Misskey.v2025.API
+namespace Misstab.Common.AnalyzeData.Format.Misskey.v2025.API
 {
     public class Meta
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace MiView.Common.AnalyzeData.Format.Misskey.v2025
+namespace Misstab.Common.AnalyzeData.Format.Misskey.v2025
 {
     public class Note
     {

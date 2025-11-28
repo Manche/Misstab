@@ -1,4 +1,4 @@
-﻿namespace MiView.ScreenForms.DialogForm.Viewer
+﻿namespace Misstab.ScreenForms.DialogForm.Viewer
 {
     partial class StasticTimeLine
     {

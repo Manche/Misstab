@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Notification.Connector
+namespace Misstab.Common.Notification.Connector
 {
     public partial class NotificationConnectorControlForm : NotificationControlForm
     {

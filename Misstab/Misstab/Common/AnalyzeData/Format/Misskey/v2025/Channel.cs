@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace MiView.Common.AnalyzeData.Format
+namespace Misstab.Common.AnalyzeData.Format
 {
     public class Channel
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Connection.WebSocket.Event
+namespace Misstab.Common.Connection.WebSocket.Event
 {
     public class ConnectDataReceivedEventArgs : EventArgs
     {

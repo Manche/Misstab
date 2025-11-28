@@ -1,4 +1,4 @@
-﻿namespace MiViewUpdater
+﻿namespace MisstabUpdater
 {
     partial class Form1
     {

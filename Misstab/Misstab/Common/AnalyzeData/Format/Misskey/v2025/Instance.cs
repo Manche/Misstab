@@ -6,7 +6,7 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MiView.Common.AnalyzeData.Format
+namespace Misstab.Common.AnalyzeData.Format
 {
     public class Instance
     {

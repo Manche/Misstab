@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Connection.WebSocket
+namespace Misstab.Common.Connection.WebSocket
 {
     public class TimeLineBasic
     {

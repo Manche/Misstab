@@ -1,5 +1,5 @@
-﻿using MiView.Common.Notification.Baloon;
-using MiView.Common.Setting;
+﻿using Misstab.Common.Notification.Baloon;
+using Misstab.Common.Setting;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Notification.Sound
+namespace Misstab.Common.Notification.Sound
 {
     public class NotificationSoundController : NotificationController
     {

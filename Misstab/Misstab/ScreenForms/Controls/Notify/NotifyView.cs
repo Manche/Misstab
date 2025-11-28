@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.ScreenForms.Controls.Notify
+namespace Misstab.ScreenForms.Controls.Notify
 {
     /// <summary>
     /// 通知共通コンポーネント

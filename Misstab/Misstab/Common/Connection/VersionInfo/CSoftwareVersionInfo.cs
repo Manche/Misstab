@@ -1,12 +1,12 @@
-﻿using MiView.Common.Connection.REST.Constraint;
-using MiView.ScreenForms.Controls.Combo;
+﻿using Misstab.Common.Connection.REST.Constraint;
+using Misstab.ScreenForms.Controls.Combo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Connection.VersionInfo
+namespace Misstab.Common.Connection.VersionInfo
 {
     public class CSoftwareVersionInfo
     {

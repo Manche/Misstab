@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MiView.Common.Fonts.Material
+namespace Misstab.Common.Fonts.Material
 {
     /// <summary>
     /// The unicode codepoints for each glyph in Material Symbols.

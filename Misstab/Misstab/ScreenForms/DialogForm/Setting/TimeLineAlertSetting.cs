@@ -1,5 +1,5 @@
-﻿using MiView.Common.Notification;
-using MiView.Common.TimeLine;
+﻿using Misstab.Common.Notification;
+using Misstab.Common.TimeLine;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +11,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MiView.ScreenForms.DialogForm.Setting
+namespace Misstab.ScreenForms.DialogForm.Setting
 {
     public partial class TimeLineAlertSetting : Form
     {

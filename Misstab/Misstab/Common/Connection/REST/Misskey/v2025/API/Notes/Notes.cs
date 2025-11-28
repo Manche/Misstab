@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Connection.REST.Misskey.v2025.API.Notes
+namespace Misstab.Common.Connection.REST.Misskey.v2025.API.Notes
 {
     public class Notes : MisskeyAPIController
     {

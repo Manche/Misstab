@@ -10,7 +10,7 @@ using ImageSharpImage = SixLabors.ImageSharp.Image;
 using Image = System.Drawing.Image;
 using Point = System.Drawing.Point;
 
-namespace MiView.Common.Util
+namespace Misstab.Common.Util
 {
     public class ImageCacher
     {

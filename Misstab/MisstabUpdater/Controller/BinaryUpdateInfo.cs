@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiViewUpdater.Controller
+namespace MisstabUpdater.Controller
 {
     public class BinaryUpdateInfo
     {
@@ -23,7 +23,7 @@ namespace MiViewUpdater.Controller
         /// <summary>
         /// 設定ディレクトリ
         /// </summary>
-        public static readonly string SETTINGS_DIR = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MiView");
+        public static readonly string SETTINGS_DIR = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Misstab");
         public static readonly string UPDATEINFO_DIR = "\\UPDATEINFO";
         /// <summary>
         /// websocket

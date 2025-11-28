@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.TimeLine
+namespace Misstab.Common.TimeLine
 {
     public class TimeLineStastics
     {

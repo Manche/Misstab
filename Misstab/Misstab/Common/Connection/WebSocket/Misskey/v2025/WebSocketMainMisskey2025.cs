@@ -1,6 +1,6 @@
-﻿using MiView.Common.Connection.WebSocket.Event;
-using MiView.Common.Connection.WebSocket.Structures;
-using MiView.Common.TimeLine;
+﻿using Misstab.Common.Connection.WebSocket.Event;
+using Misstab.Common.Connection.WebSocket.Structures;
+using Misstab.Common.TimeLine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Connection.WebSocket.Misskey.v2025
+namespace Misstab.Common.Connection.WebSocket.Misskey.v2025
 {
     internal class WebSocketMainMisskey2025 : WebSocketMain
     {

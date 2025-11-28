@@ -1,7 +1,7 @@
-﻿using MiView.Common.Connection.REST;
-using MiView.Common.Connection.VersionInfo;
-using MiView.Common.Connection.WebSocket.Structures;
-using MiView.ScreenForms.Controls.Combo;
+﻿using Misstab.Common.Connection.REST;
+using Misstab.Common.Connection.VersionInfo;
+using Misstab.Common.Connection.WebSocket.Structures;
+using Misstab.ScreenForms.Controls.Combo;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MiView.ScreenForms.DialogForm
+namespace Misstab.ScreenForms.DialogForm
 {
     public partial class AddInstanceWithAPIKey : Form
     {

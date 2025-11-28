@@ -1,5 +1,5 @@
-﻿using MiView.Common.Connection.WebSocket;
-using MiView.Common.TimeLine;
+﻿using Misstab.Common.Connection.WebSocket;
+using Misstab.Common.TimeLine;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MiView.ScreenForms.DialogForm.Setting
+namespace Misstab.ScreenForms.DialogForm.Setting
 {
     public partial class APIReflexSetting : Form
     {

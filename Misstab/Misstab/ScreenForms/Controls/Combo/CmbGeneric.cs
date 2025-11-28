@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.ScreenForms.Controls.Combo
+namespace Misstab.ScreenForms.Controls.Combo
 {
     public class CmbGeneric
     {

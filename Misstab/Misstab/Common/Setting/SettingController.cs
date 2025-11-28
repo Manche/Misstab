@@ -1,6 +1,6 @@
-﻿using MiView.Common.Notification;
-using MiView.Common.Notification.Baloon;
-using MiView.Common.TimeLine;
+﻿using Misstab.Common.Notification;
+using Misstab.Common.Notification.Baloon;
+using Misstab.Common.TimeLine;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Setting
+namespace Misstab.Common.Setting
 {
     /// <summary>
     /// 設定コントローラ
@@ -230,7 +230,7 @@ namespace MiView.Common.Setting
         /// <summary>
         /// 設定ディレクトリ
         /// </summary>
-        public static readonly string SETTINGS_DIR = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MiView");
+        public static readonly string SETTINGS_DIR = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Misstab");
         public static readonly string ALERT_DIR = "\\ALERT";
         public static readonly string NOTIFICATION_DIR = "\\ALERT";
         /// <summary>

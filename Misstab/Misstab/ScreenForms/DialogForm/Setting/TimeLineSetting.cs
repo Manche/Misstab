@@ -1,6 +1,6 @@
-﻿using MiView.Common.Connection.WebSocket;
-using MiView.Common.TimeLine;
-using MiView.ScreenForms.DialogForm.Event;
+﻿using Misstab.Common.Connection.WebSocket;
+using Misstab.Common.TimeLine;
+using Misstab.ScreenForms.DialogForm.Event;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,9 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static MiView.ScreenForms.DialogForm.Setting.APISetting;
+using static Misstab.ScreenForms.DialogForm.Setting.APISetting;
 
-namespace MiView.ScreenForms.DialogForm.Setting
+namespace Misstab.ScreenForms.DialogForm.Setting
 {
     public partial class TimeLineSetting : Form
     {

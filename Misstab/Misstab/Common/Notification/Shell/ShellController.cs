@@ -1,11 +1,11 @@
-﻿using MiView.Common.Notification.Baloon;
+﻿using Misstab.Common.Notification.Baloon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.Notification.Shell
+namespace Misstab.Common.Notification.Shell
 {
     /// <summary>
     /// シェル通知コントローラ

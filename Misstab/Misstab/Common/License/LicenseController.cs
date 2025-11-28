@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiView.Common.License
+namespace Misstab.Common.License
 {
     /// <summary>
     /// ライセンスコントローラ

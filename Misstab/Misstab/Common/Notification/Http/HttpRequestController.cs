@@ -1,4 +1,4 @@
-﻿using MiView.Common.Notification.Baloon;
+﻿using Misstab.Common.Notification.Baloon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
-namespace MiView.Common.Notification.Http
+namespace Misstab.Common.Notification.Http
 {
     public class HttpRequestController : NotificationController
     {

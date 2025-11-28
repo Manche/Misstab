@@ -1,4 +1,4 @@
-﻿using MiView.ScreenForms.DialogForm.Event;
+﻿using Misstab.ScreenForms.DialogForm.Event;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MiView.ScreenForms.DialogForm
+namespace Misstab.ScreenForms.DialogForm
 {
     public partial class AddTimeLine : Form
     {

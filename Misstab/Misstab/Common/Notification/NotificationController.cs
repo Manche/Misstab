@@ -1,10 +1,10 @@
-﻿using MiView.Common.Notification.Baloon;
-using MiView.Common.Notification.Http;
-using MiView.Common.Notification.Mail;
-using MiView.Common.Notification.Shell;
-using MiView.Common.Notification.Sound;
-using MiView.Common.Notification.Toast;
-using MiView.Common.TimeLine;
+﻿using Misstab.Common.Notification.Baloon;
+using Misstab.Common.Notification.Http;
+using Misstab.Common.Notification.Mail;
+using Misstab.Common.Notification.Shell;
+using Misstab.Common.Notification.Sound;
+using Misstab.Common.Notification.Toast;
+using Misstab.Common.TimeLine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace MiView.Common.Notification
+namespace Misstab.Common.Notification
 {
     /// <summary>
     /// 通知コントローラー

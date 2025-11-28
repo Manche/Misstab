@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace MiView.Common.Notification
+namespace Misstab.Common.Notification
 {
     public partial class NotificationControlForm : UserControl
     {

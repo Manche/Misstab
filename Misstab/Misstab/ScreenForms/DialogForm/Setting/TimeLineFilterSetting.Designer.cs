@@ -1,4 +1,4 @@
-﻿namespace MiView.ScreenForms.DialogForm.Setting
+﻿namespace Misstab.ScreenForms.DialogForm.Setting
 {
     partial class TimeLineFilterSetting
     {

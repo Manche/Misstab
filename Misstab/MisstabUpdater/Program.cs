@@ -1,4 +1,4 @@
-namespace MiViewUpdater
+namespace MisstabUpdater
 {
     internal static class Program
     {

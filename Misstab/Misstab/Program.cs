@@ -1,8 +1,8 @@
-using MiView.Common.Util;
-using MiView.ScreenForms.Controls.Notify;
-using MiView.ScreenForms.DialogForm;
+using Misstab.Common.Util;
+using Misstab.ScreenForms.Controls.Notify;
+using Misstab.ScreenForms.DialogForm;
 
-namespace MiView
+namespace Misstab
 {
     internal static class Program
     {
