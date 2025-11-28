@@ -53,9 +53,9 @@
             lblTitle.AutoSize = true;
             lblTitle.Location = new Point(32, 209);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(46, 15);
+            lblTitle.Size = new Size(48, 15);
             lblTitle.TabIndex = 1;
-            lblTitle.Text = "MiView";
+            lblTitle.Text = "Misstab";
             // 
             // lblVerTitle
             // 
