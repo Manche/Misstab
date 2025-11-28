@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36109.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiView", "MiView\MiView.csproj", "{AB000E88-39C5-4817-85C9-EF8F04DC08EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Misstab", "MiView\Misstab.csproj", "{AB000E88-39C5-4817-85C9-EF8F04DC08EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiViewUpdater", "MiViewUpdater\MiViewUpdater.csproj", "{83C3CBFD-1774-43A4-9034-211E0E220CC7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MisstabUpdater", "MiViewUpdater\MisstabUpdater.csproj", "{83C3CBFD-1774-43A4-9034-211E0E220CC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiViewProxyServer", "MiViewProxyServer\MiViewProxyServer.csproj", "{F5334F05-6EDC-4C3B-ACA0-0236018D995B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MisstabProxyServer", "MiViewProxyServer\MisstabProxyServer.csproj", "{F5334F05-6EDC-4C3B-ACA0-0236018D995B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

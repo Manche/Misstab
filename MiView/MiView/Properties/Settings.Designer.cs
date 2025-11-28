@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MiView.Properties {
+namespace Misstab.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
