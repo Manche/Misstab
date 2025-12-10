@@ -1,4 +1,5 @@
 ﻿using Misstab.Common.Notification.Baloon;
+using Misstab.Common.Notification.Connector.ConfirmationButton;
 using Misstab.Common.Notification.Http;
 using Misstab.Common.Notification.Mail;
 using Misstab.Common.Notification.Shell;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -53,7 +55,8 @@ namespace Misstab.Common.Notification
             NotificationSound,
 
             LogWrite,
-            DataBase
+            DataBase,
+            ConfirmationButton
         }
         public static Dictionary<CONTROLLER_KIND, string> ControllerKindName = new Dictionary<CONTROLLER_KIND, string>()
         {
@@ -62,7 +65,8 @@ namespace Misstab.Common.Notification
             {CONTROLLER_KIND.Shell, ShellController.ControllerName},
             {CONTROLLER_KIND.HttpRequest, HttpRequestController.ControllerName},
             {CONTROLLER_KIND.Toast, ToastController.ControllerName},
-            {CONTROLLER_KIND.NotificationSound, NotificationSoundController.ControllerName}
+            {CONTROLLER_KIND.NotificationSound, NotificationSoundController.ControllerName},
+            {CONTROLLER_KIND.ConfirmationButton, ConfirmationButtonController.ControllerName}
         };
 
         protected CONTROLLER_KIND _ControllerKind { get; set; } = CONTROLLER_KIND.None;
@@ -95,6 +99,8 @@ namespace Misstab.Common.Notification
                     return new ToastController() { _ControllerKind = CONTROLLER_KIND.Toast };
                 case CONTROLLER_KIND.NotificationSound:
                     return new NotificationSoundController() { _ControllerKind = CONTROLLER_KIND.NotificationSound };
+                case CONTROLLER_KIND.ConfirmationButton:
+                    return new ConfirmationButtonController() { _ControllerKind = CONTROLLER_KIND.ConfirmationButton };
             }
 
             throw new NotImplementedException();
