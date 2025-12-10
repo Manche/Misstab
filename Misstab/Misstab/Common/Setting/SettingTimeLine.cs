@@ -17,6 +17,7 @@ namespace Misstab.Common.Setting
         public bool IsFiltered { get; set; } = false;
         public bool IsVisible { get; set; } = true;
         public bool IsUpdateTL { get; set; } = true;
+        public int MaxTimeLineCount { get; set; } = SettingTimeLineConst.MAX_TIMELINE_COUNT;
         public required List<TimeLineFilterlingOption> FilteringOptions { get; set; }
         public required List<TimeLineAlertOption> AlertOptions { get; set; }
         public static SettingTimeLine ConvertDataGridTimeLineToSettingObj(DataGridTimeLine WSTimeLine)
@@ -35,5 +36,10 @@ namespace Misstab.Common.Setting
                 AlertOptions = WSTimeLine._AlertOptions,
             };
         }
+    }
+
+    public class SettingTimeLineConst
+    {
+        public const int MAX_TIMELINE_COUNT = 20000;
     }
 }

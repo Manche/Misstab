@@ -739,7 +739,14 @@ namespace Misstab.Common.TimeLine
     /// </summary>
     public partial class DataGridTimeLine : System.Windows.Forms.DataGridView
     {
+        /// <summary>
+        /// 表示データ
+        /// </summary>
         private List<TimeLineContainer> _TimeLineData = new List<TimeLineContainer>();
+        /// <summary>
+        /// バックアップデータ
+        /// </summary>
+        private List<TimeLineContainer> _TimeLineBackData = new List<TimeLineContainer>();
 
         public TimeLineStastics Stastics { get; set; } = new TimeLineStastics();
 
@@ -857,6 +864,13 @@ namespace Misstab.Common.TimeLine
                 return _AlertOptions.FindAll(r => { return r._Alert_Timing == TimeLineAlertOption.ALERT_TIMING.ON_TIMELINE; });
             }
         }
+        public List<TimeLineAlertOption> _AlertBackUp
+        {
+            get
+            {
+                return _AlertOptions.FindAll(r => { return r._Alert_Timing == TimeLineAlertOption.ALERT_TIMING.ON_BACKUP; });
+            }
+        }
 
         /// <summary>
         /// タイムライン更新描画をするかどうか
@@ -865,6 +879,11 @@ namespace Misstab.Common.TimeLine
         /// デフォルトではON
         /// </remarks>
         public bool _IsUpdateTL = true;
+
+        /// <summary>
+        /// タイムラインの最大行数
+        /// </summary>
+        public int MaxTimeLineItemCount = SettingTimeLineConst.MAX_TIMELINE_COUNT;
 
         /// <summary>
         /// タイムラインの最新行を常に選択するかどうか
@@ -1141,6 +1160,9 @@ namespace Misstab.Common.TimeLine
                 return;
             }
             var LocalContainer = Container.DeepClone();
+            int Found = 0;
+            int Filted = 0;
+            bool CountRet = false;
 
             try
             {
@@ -1172,7 +1194,33 @@ namespace Misstab.Common.TimeLine
                     }
 
 
+                    // maxを適用しつつバックアップに送る
+                    if (this._TimeLineData.Count >= this.MaxTimeLineItemCount)
+                    {
+                        foreach (TimeLineAlertOption Opt in this._AlertBackUp)
+                        {
+                            Found = Opt._FilterOptions.FindAll(r => { return r.FilterResult(); }).Count();
+                            Filted = Opt._FilterOptions.Count();
+
+                            CountRet = false;
+                            if (Opt._FilterMode)
+                            {
+                                CountRet = Found == Filted;
+                            }
+                            else
+                            {
+                                CountRet = Found > 0;
+                            }
+                            if (CountRet)
+                            {
+                                Opt.ExecuteAlert(this._TimeLineData[0]);
+                            }
+                        }
+                        this._TimeLineData.RemoveAt(0);
+                    }
                     this._TimeLineData.Add(LocalContainer);
+                    this.Refresh();
+                    this._TimeLineBackData.Add(LocalContainer);
                     // ImageCacher.Instance.SaveIconImage();
                     if (LocalContainer.ORIGINAL != null && LocalContainer.ORIGINAL.ToString() != string.Empty)
                     {
@@ -1229,9 +1277,6 @@ namespace Misstab.Common.TimeLine
                 //    // 色変更
                 //    // this.ChangeDispColor(ref Row, Container);
                 //}
-                int Found = 0;
-                int Filted = 0;
-                bool CountRet = false; ;
                 foreach (TimeLineAlertOption Opt in this._AlertTimeLine)
                 {
                     Found = Opt._FilterOptions.FindAll(r => { return r.FilterResult(); }).Count();
@@ -2042,7 +2087,8 @@ namespace Misstab.Common.TimeLine
             NONE = 0,
             ACCEPT,
             REJECT,
-            ON_TIMELINE
+            ON_TIMELINE,
+            ON_BACKUP,
         }
 
         public ALERT_TIMING _Alert_Timing { get; set; } = ALERT_TIMING.NONE;
@@ -2051,7 +2097,8 @@ namespace Misstab.Common.TimeLine
             {ALERT_TIMING.NONE, "" },
             {ALERT_TIMING.ACCEPT, "取得条件に合致した時" },
             {ALERT_TIMING.REJECT, "取得条件に合致しなかった時" },
-            {ALERT_TIMING.ON_TIMELINE, "タイムラインに表示された時" }
+            {ALERT_TIMING.ON_TIMELINE, "タイムラインに表示された時" },
+            {ALERT_TIMING.ON_BACKUP, "バックアップに移動された時" }
         };
 
         /// <summary>
