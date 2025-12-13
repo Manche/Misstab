@@ -7,7 +7,7 @@ namespace MisstabProxyServer
         public Form1()
         {
             InitializeComponent();
-            WebSocketController.Instance.Runner();
+            // WebSocketController.Instance.Runner();
         }
     }
 }
