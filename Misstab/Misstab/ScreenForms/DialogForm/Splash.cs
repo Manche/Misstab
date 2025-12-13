@@ -27,31 +27,46 @@ namespace Misstab.ScreenForms.DialogForm
 
         public void SetMessageAndProgress(string Txt, int Num)
         {
-            SetMessage(Txt);
-            SetProgress(Num);
-            this.Refresh();
-            Thread.Sleep(100);
+            _ = Task.Run(() =>
+            {
+                SetMessage(Txt);
+                SetProgress(Num);
+                this.Refresh();
+                Thread.Sleep(100);
+            });
         }
 
         public void SetMessage(string Txt)
         {
-            if (InvokeRequired)
+            try
             {
-                this.Invoke(SetMessage, Txt);
-                return;
+                if (InvokeRequired)
+                {
+                    this.Invoke(SetMessage, Txt);
+                    return;
+                }
+                this.lblMsg.Text = Txt;
+                this.lblMsg.AutoSize = true;
             }
-            this.lblMsg.Text = Txt;
-            this.lblMsg.AutoSize = true;
+            catch
+            {
+            }
         }
 
         public void SetProgress(int Num)
         {
-            if (InvokeRequired)
+            try
             {
-                this.Invoke(SetProgress, Num);
-                return;
+                if (InvokeRequired)
+                {
+                    this.Invoke(SetProgress, Num);
+                    return;
+                }
+                this.progWait.Value = Num;
             }
-            this.progWait.Value = Num;
+            catch
+            {
+            }
         }
 
         public void CloseForm()
