@@ -1,4 +1,5 @@
 ﻿using Misstab.Common.Notification;
+using Misstab.Common.Notification.Connector.ConfirmationButton;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,6 +25,9 @@ namespace Misstab.ScreenForms.DialogForm.Setting
             this.cmbNotificationKind.Items.Add(new NotificationControllerCombo(NotificationController.CONTROLLER_KIND.Shell));
             this.cmbNotificationKind.Items.Add(new NotificationControllerCombo(NotificationController.CONTROLLER_KIND.Toast));
             this.cmbNotificationKind.Items.Add(new NotificationControllerCombo(NotificationController.CONTROLLER_KIND.NotificationSound));
+
+            // 隠し
+            // this.cmbNotificationKind.Items.Add(new NotificationControllerCombo(NotificationController.CONTROLLER_KIND.ConfirmationButton));
         }
 
         private NotificationController _n { get; set; }
