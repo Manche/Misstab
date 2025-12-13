@@ -30,6 +30,7 @@ namespace Misstab
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             menuStrip1 = new MenuStrip();
             設定ToolStripMenuItem = new ToolStripMenuItem();
             tspAPISetting = new ToolStripMenuItem();
@@ -340,6 +341,7 @@ namespace Misstab
             Controls.Add(statusStrip1);
             Controls.Add(tbMain);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "MainForm";
             Text = "Misstab - MainForm";

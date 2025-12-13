@@ -42,7 +42,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Common\Assets\Images\Icon\icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Common\Assets\Images\Icon\icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Common\Assets\Images\Icon\_empty">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Common\Assets\Images\Logo_002.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Common\Sound\Sample\ピコ！.mp3">
@@ -91,7 +100,6 @@
     <Folder Include="Common\AnalyzeData\Format\Misskey\v2024\" />
     <Folder Include="Common\Connection\REST\Misskey\v2025\API\Channels\" />
     <Folder Include="Common\Connection\WebSocket\Misskey\v11\" />
-    <Folder Include="Common\Notification\Connector\Database\" />
   </ItemGroup>
 
   <ItemGroup>
