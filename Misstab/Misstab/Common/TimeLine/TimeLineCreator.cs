@@ -1,4 +1,5 @@
 ﻿using Misstab.Common.AnalyzeData;
+using Misstab.Common.AnalyzeData.Format.Misskey.v2025;
 using Misstab.Common.Connection.VersionInfo;
 using Misstab.Common.Connection.WebSocket;
 using Misstab.Common.Fonts;
@@ -1052,7 +1053,7 @@ namespace Misstab.Common.TimeLine
                 }
                 else
                 {
-                    var img = ImageCacher.Instance.TryGetImage(this._Definition + "@@" + this._TimeLineData[e.RowIndex].USERID);
+                    var img = ImageCacher.Instance.TryGetImage(this._TimeLineData[e.RowIndex].USERID + (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(this._TimeLineData[e.RowIndex].ORIGINAL).Note.User.Host) ?? this._TimeLineData[e.RowIndex].ORIGINAL_HOST));
                     if (img != null)
                     {
                         e.Value = img;
@@ -1064,7 +1065,7 @@ namespace Misstab.Common.TimeLine
                         {
                             if (this._TimeLineData[e.RowIndex].ORIGINAL != null && this._TimeLineData[e.RowIndex].ORIGINAL.ToString() != string.Empty)
                             {
-                                ImageCacher.Instance.SaveIconImage(this._Definition + "@@" + this._TimeLineData[e.RowIndex].USERID,
+                                ImageCacher.Instance.SaveIconImage(this._TimeLineData[e.RowIndex].USERID + (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(this._TimeLineData[e.RowIndex].ORIGINAL).Note.User.Host) ?? this._TimeLineData[e.RowIndex].ORIGINAL_HOST),
                                                                    JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(this._TimeLineData[e.RowIndex].ORIGINAL).Note.User.AvatarUrl));
                             }
                         }
@@ -1193,38 +1194,13 @@ namespace Misstab.Common.TimeLine
                         return;
                     }
 
-
-                    // maxを適用しつつバックアップに送る
-                    if (this._TimeLineData.Count >= this.MaxTimeLineItemCount)
-                    {
-                        foreach (TimeLineAlertOption Opt in this._AlertBackUp)
-                        {
-                            Found = Opt._FilterOptions.FindAll(r => { return r.FilterResult(); }).Count();
-                            Filted = Opt._FilterOptions.Count();
-
-                            CountRet = false;
-                            if (Opt._FilterMode)
-                            {
-                                CountRet = Found == Filted;
-                            }
-                            else
-                            {
-                                CountRet = Found > 0;
-                            }
-                            if (CountRet)
-                            {
-                                Opt.ExecuteAlert(this._TimeLineData[0]);
-                            }
-                        }
-                        this._TimeLineData.RemoveAt(0);
-                    }
                     this._TimeLineData.Add(LocalContainer);
                     this.Refresh();
                     this._TimeLineBackData.Add(LocalContainer);
                     // ImageCacher.Instance.SaveIconImage();
                     if (LocalContainer.ORIGINAL != null && LocalContainer.ORIGINAL.ToString() != string.Empty)
                     {
-                        ImageCacher.Instance.SaveIconImage(this._Definition + "@@" + Container.USERID, JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
+                        ImageCacher.Instance.SaveIconImage(LocalContainer.USERID + (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.Host) ?? LocalContainer.ORIGINAL_HOST), JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
                         System.Diagnostics.Debug.WriteLine(JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
                     }
 
@@ -1300,6 +1276,31 @@ namespace Misstab.Common.TimeLine
                 {
                     this.Invalidate();
                 };
+
+                // maxを適用しつつバックアップに送る
+                if (this._TimeLineData.Count >= this.MaxTimeLineItemCount)
+                {
+                    foreach (TimeLineAlertOption Opt in this._AlertBackUp)
+                    {
+                        Found = Opt._FilterOptions.FindAll(r => { return r.FilterResult(); }).Count();
+                        Filted = Opt._FilterOptions.Count();
+
+                        CountRet = false;
+                        if (Opt._FilterMode)
+                        {
+                            CountRet = Found == Filted;
+                        }
+                        else
+                        {
+                            CountRet = Found > 0;
+                        }
+                        if (CountRet)
+                        {
+                            Opt.ExecuteAlert(this._TimeLineData[0]);
+                        }
+                    }
+                    this._TimeLineData.RemoveAt(0);
+                }
             }
             catch (Exception ce)
             {
