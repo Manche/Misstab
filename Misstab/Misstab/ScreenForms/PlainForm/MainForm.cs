@@ -76,6 +76,9 @@ namespace Misstab
             this.tabControl1.Size = new Size(this.tabControl1.Size.Width, this.tabControl1.Size.Height + this.pnSub.Size.Height);
             this.tbMain.Size = new Size(this.tbMain.Size.Width, this.tbMain.Size.Height + this.pnSub.Size.Height);
 
+            // 説明欄
+            this.lblPostDescription.Text = string.Empty;
+
             // イベント設定
             DataAccepted += OnDataAccepted;
             DataRejected += OnDataRejected;
@@ -517,8 +520,27 @@ namespace Misstab
                 _TLCreator.CreateTimeLineTab(ref this.MainFormObj, WSTimeLine.Definition, WSTimeLine.TabName, WSTimeLine.IsVisible);
                 _TLCreator.CreateTimeLine(ref this.MainFormObj, WSTimeLine.Definition, WSTimeLine.Definition, IsFiltered: WSTimeLine.IsFiltered);
                 _TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, WSTimeLine.Definition).SetSaveIconImages(WSTimeLine.IsSaveIcon);
-                _TLCreator.GetGrid(WSTimeLine.Definition)._FilteringOptions = WSTimeLine.FilteringOptions;
-                _TLCreator.GetGrid(WSTimeLine.Definition)._AlertOptions = WSTimeLine.AlertOptions;
+                try
+                {
+                    _TLCreator.GetGrid(WSTimeLine.Definition)._FilteringOptions = WSTimeLine.FilteringOptions;
+                }
+                catch
+                {
+                }
+                try
+                {
+                    _TLCreator.GetGrid(WSTimeLine.Definition)._AlertOptions = WSTimeLine.AlertOptions;
+                }
+                catch
+                {
+                }
+                try
+                {
+                    _TLCreator.GetGrid(WSTimeLine.Definition).SetDataGridTimeLineViewSetting(WSTimeLine.ViewSetting??new Common.TimeLine.Setting.DataGridTimeLineViewSetting());
+                }
+                catch
+                {
+                }
                 _TmpTLManager.Add(WSTimeLine.Definition, WSTimeLine.TabName);
             }
             Splash.instance.SetMessageAndProgress("タイムライン読み込み", 100);

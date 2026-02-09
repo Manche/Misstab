@@ -59,6 +59,7 @@ namespace Misstab
             tpDebug = new TabPage();
             chkMuteSound = new CheckBox();
             chkAutoBelowScroll = new CheckBox();
+            lblPostDescription = new Label();
             menuStrip1.SuspendLayout();
             tbMain.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -172,7 +173,7 @@ namespace Misstab
             // textBox1
             // 
             textBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            textBox1.Location = new Point(0, 560);
+            textBox1.Location = new Point(0, 537);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(784, 59);
@@ -208,7 +209,7 @@ namespace Misstab
             pnMain.Controls.Add(lblUser);
             pnMain.Location = new Point(0, 275);
             pnMain.Name = "pnMain";
-            pnMain.Size = new Size(784, 171);
+            pnMain.Size = new Size(784, 153);
             pnMain.TabIndex = 8;
             // 
             // txtDetail
@@ -268,7 +269,7 @@ namespace Misstab
             // 
             pnSub.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnSub.Controls.Add(tabControl1);
-            pnSub.Location = new Point(0, 446);
+            pnSub.Location = new Point(0, 430);
             pnSub.Name = "pnSub";
             pnSub.Size = new Size(784, 108);
             pnSub.TabIndex = 9;
@@ -326,11 +327,21 @@ namespace Misstab
             chkAutoBelowScroll.UseVisualStyleBackColor = true;
             chkAutoBelowScroll.CheckedChanged += chkAutoBelowScroll_CheckedChanged;
             // 
+            // lblPostDescription
+            // 
+            lblPostDescription.AutoSize = true;
+            lblPostDescription.Location = new Point(4, 601);
+            lblPostDescription.Name = "lblPostDescription";
+            lblPostDescription.Size = new Size(38, 15);
+            lblPostDescription.TabIndex = 11;
+            lblPostDescription.Text = "label1";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(784, 673);
+            Controls.Add(lblPostDescription);
             Controls.Add(chkAutoBelowScroll);
             Controls.Add(chkMuteSound);
             Controls.Add(pnSub);
@@ -390,5 +401,6 @@ namespace Misstab
         private ToolStripMenuItem tspWindowStasticTimeLine;
         private CheckBox chkMuteSound;
         private CheckBox chkAutoBelowScroll;
+        private Label lblPostDescription;
     }
 }

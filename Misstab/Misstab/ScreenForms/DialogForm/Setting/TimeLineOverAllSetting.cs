@@ -1,4 +1,5 @@
-﻿using Misstab.Common.TimeLine;
+﻿using Misstab.Common.Setting;
+using Misstab.Common.TimeLine;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,10 +34,21 @@ namespace Misstab.ScreenForms.DialogForm.Setting
             {
                 return;
             }
-            if (this._Preference.CheckLowSpec)
+            if (this._Preference.CheckLowSpecTimeLine)
             {
                 _TimeLine.SetSaveIconImages(!chkLowSpecMode.Checked);
             }
+
+            var TimeLineViewSetting = _TimeLine._ViewSetting;
+            if (chkUnlimitedLineCount.Checked)
+            {
+                TimeLineViewSetting.MaxTimeLineItemCount = -1;
+            }
+            else
+            {
+                TimeLineViewSetting.MaxTimeLineItemCount = (int)numMaxLineCount.Value;
+            }
+            _TimeLine.SetDataGridTimeLineViewSetting(TimeLineViewSetting);
             _TimeLine.SettingChanged(sender, e);
         }
 
@@ -45,7 +57,7 @@ namespace Misstab.ScreenForms.DialogForm.Setting
             this.Close();
         }
 
-        private bool ValidateLowSpec()
+        private bool ValidateTimeLineLowSpec()
         {
             if (_TimeLine == null)
             {
@@ -57,7 +69,7 @@ namespace Misstab.ScreenForms.DialogForm.Setting
                 {
                     return false;
                 }
-                this._Preference.CheckLowSpec = true;
+                this._Preference.CheckLowSpecTimeLine = true;
             }
             return true;
         }
@@ -74,6 +86,10 @@ namespace Misstab.ScreenForms.DialogForm.Setting
             this.txtDescription.Text = "";
 
             this.chkLowSpecMode.Checked = !_TimeLine._IsSaveIcon;
+
+            var TimeLineViewSetting = _TimeLine._ViewSetting;
+            this.chkUnlimitedLineCount.Checked = TimeLineViewSetting.MaxTimeLineItemCount == -1;
+            this.numMaxLineCount.Value = TimeLineViewSetting.MaxTimeLineItemCount == -1 ? SettingTimeLineConst.MAX_TIMELINE_COUNT : TimeLineViewSetting.MaxTimeLineItemCount;
         }
 
         private void chkLowSpecMode_CheckedChanged(object sender, EventArgs e)
@@ -82,7 +98,7 @@ namespace Misstab.ScreenForms.DialogForm.Setting
             {
                 return;
             }
-            if (!ValidateLowSpec())
+            if (!ValidateTimeLineLowSpec())
             {
                 this.chkLowSpecMode.Checked = !_TimeLine._IsSaveIcon;
                 return;
@@ -94,5 +110,6 @@ namespace Misstab.ScreenForms.DialogForm.Setting
     {
         public bool CheckLowSpec { get; set; } = false;
         public bool CheckPhyscalDelete { get; set; } = false;
+        public bool CheckLowSpecTimeLine { get; set; } = false;
     }
 }

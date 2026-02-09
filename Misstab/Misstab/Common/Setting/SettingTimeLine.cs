@@ -1,5 +1,6 @@
 ﻿using Misstab.Common.Connection.WebSocket;
 using Misstab.Common.TimeLine;
+using Misstab.Common.TimeLine.Setting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace Misstab.Common.Setting
         public bool IsFiltered { get; set; } = false;
         public bool IsVisible { get; set; } = true;
         public bool IsUpdateTL { get; set; } = true;
-        public int MaxTimeLineCount { get; set; } = SettingTimeLineConst.MAX_TIMELINE_COUNT;
-        public required List<TimeLineFilterlingOption> FilteringOptions { get; set; }
-        public required List<TimeLineAlertOption> AlertOptions { get; set; }
+        public List<TimeLineFilterlingOption>? FilteringOptions { get; set; }
+        public List<TimeLineAlertOption>? AlertOptions { get; set; }
+        public DataGridTimeLineViewSetting? ViewSetting { get; set; }
         public bool IsSaveIcon { get; set; } = true;
         public static SettingTimeLine ConvertDataGridTimeLineToSettingObj(DataGridTimeLine WSTimeLine)
         {
@@ -35,6 +36,7 @@ namespace Misstab.Common.Setting
 
                 FilteringOptions = WSTimeLine._FilteringOptions,
                 AlertOptions = WSTimeLine._AlertOptions,
+                ViewSetting = WSTimeLine._ViewSetting,
 
                 IsSaveIcon = WSTimeLine._IsSaveIcon,
             };

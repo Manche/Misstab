@@ -32,12 +32,18 @@
             button2 = new Button();
             tabControl1 = new TabControl();
             tbSummary = new TabPage();
+            cmdDeleteTimeLine = new Button();
+            chkPhyscalDelete = new CheckBox();
             chkLowSpecMode = new CheckBox();
             tbDrive = new TabPage();
-            chkPhyscalDelete = new CheckBox();
+            chkUnlimitedLineCount = new CheckBox();
+            numMaxLineCount = new NumericUpDown();
+            label1 = new Label();
             txtDescription = new TextBox();
             tabControl1.SuspendLayout();
             tbSummary.SuspendLayout();
+            tbDrive.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numMaxLineCount).BeginInit();
             SuspendLayout();
             // 
             // button1
@@ -73,6 +79,7 @@
             // 
             // tbSummary
             // 
+            tbSummary.Controls.Add(cmdDeleteTimeLine);
             tbSummary.Controls.Add(chkPhyscalDelete);
             tbSummary.Controls.Add(chkLowSpecMode);
             tbSummary.Location = new Point(4, 24);
@@ -82,6 +89,28 @@
             tbSummary.TabIndex = 0;
             tbSummary.Text = "全般";
             tbSummary.UseVisualStyleBackColor = true;
+            // 
+            // cmdDeleteTimeLine
+            // 
+            cmdDeleteTimeLine.Font = new Font("Yu Gothic UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 128);
+            cmdDeleteTimeLine.ForeColor = Color.Red;
+            cmdDeleteTimeLine.Location = new Point(6, 249);
+            cmdDeleteTimeLine.Name = "cmdDeleteTimeLine";
+            cmdDeleteTimeLine.Size = new Size(240, 23);
+            cmdDeleteTimeLine.TabIndex = 2;
+            cmdDeleteTimeLine.Text = "このタイムラインを削除する";
+            cmdDeleteTimeLine.UseVisualStyleBackColor = true;
+            // 
+            // chkPhyscalDelete
+            // 
+            chkPhyscalDelete.AutoSize = true;
+            chkPhyscalDelete.Enabled = false;
+            chkPhyscalDelete.Location = new Point(6, 31);
+            chkPhyscalDelete.Name = "chkPhyscalDelete";
+            chkPhyscalDelete.Size = new Size(99, 19);
+            chkPhyscalDelete.TabIndex = 1;
+            chkPhyscalDelete.Text = "物理削除モード";
+            chkPhyscalDelete.UseVisualStyleBackColor = true;
             // 
             // chkLowSpecMode
             // 
@@ -96,24 +125,43 @@
             // 
             // tbDrive
             // 
+            tbDrive.Controls.Add(chkUnlimitedLineCount);
+            tbDrive.Controls.Add(numMaxLineCount);
+            tbDrive.Controls.Add(label1);
             tbDrive.Location = new Point(4, 24);
             tbDrive.Name = "tbDrive";
             tbDrive.Padding = new Padding(3);
-            tbDrive.Size = new Size(788, 378);
+            tbDrive.Size = new Size(788, 278);
             tbDrive.TabIndex = 1;
             tbDrive.Text = "動作";
             tbDrive.UseVisualStyleBackColor = true;
             // 
-            // chkPhyscalDelete
+            // chkUnlimitedLineCount
             // 
-            chkPhyscalDelete.AutoSize = true;
-            chkPhyscalDelete.Enabled = false;
-            chkPhyscalDelete.Location = new Point(6, 31);
-            chkPhyscalDelete.Name = "chkPhyscalDelete";
-            chkPhyscalDelete.Size = new Size(99, 19);
-            chkPhyscalDelete.TabIndex = 1;
-            chkPhyscalDelete.Text = "物理削除モード";
-            chkPhyscalDelete.UseVisualStyleBackColor = true;
+            chkUnlimitedLineCount.AutoSize = true;
+            chkUnlimitedLineCount.Location = new Point(323, 11);
+            chkUnlimitedLineCount.Name = "chkUnlimitedLineCount";
+            chkUnlimitedLineCount.Size = new Size(62, 19);
+            chkUnlimitedLineCount.TabIndex = 2;
+            chkUnlimitedLineCount.Text = "無制限";
+            chkUnlimitedLineCount.UseVisualStyleBackColor = true;
+            // 
+            // numMaxLineCount
+            // 
+            numMaxLineCount.Location = new Point(67, 11);
+            numMaxLineCount.Maximum = new decimal(new int[] { 1661992959, 1808227885, 5, 0 });
+            numMaxLineCount.Name = "numMaxLineCount";
+            numMaxLineCount.Size = new Size(250, 23);
+            numMaxLineCount.TabIndex = 1;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(6, 13);
+            label1.Name = "label1";
+            label1.Size = new Size(55, 15);
+            label1.TabIndex = 0;
+            label1.Text = "最大行数";
             // 
             // txtDescription
             // 
@@ -121,7 +169,6 @@
             txtDescription.Location = new Point(3, 349);
             txtDescription.Multiline = true;
             txtDescription.Name = "txtDescription";
-            txtDescription.ReadOnly = true;
             txtDescription.Size = new Size(796, 100);
             txtDescription.TabIndex = 3;
             // 
@@ -140,6 +187,9 @@
             tabControl1.ResumeLayout(false);
             tbSummary.ResumeLayout(false);
             tbSummary.PerformLayout();
+            tbDrive.ResumeLayout(false);
+            tbDrive.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numMaxLineCount).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -154,5 +204,9 @@
         private CheckBox chkLowSpecMode;
         private CheckBox chkPhyscalDelete;
         private TextBox txtDescription;
+        private Button cmdDeleteTimeLine;
+        private NumericUpDown numMaxLineCount;
+        private Label label1;
+        private CheckBox chkUnlimitedLineCount;
     }
 }

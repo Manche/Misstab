@@ -7,7 +7,9 @@ using Misstab.Common.Fonts.Material;
 using Misstab.Common.Notification;
 using Misstab.Common.Setting;
 using Misstab.Common.TimeLine.Event;
+using Misstab.Common.TimeLine.Setting;
 using Misstab.Common.Util;
+using NAudio.MediaFoundation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -906,10 +908,20 @@ namespace Misstab.Common.TimeLine
         }
         private event EventHandler _SaveIconImageSettingChanged;
 
-        /// <summary>
-        /// タイムラインの最大行数
-        /// </summary>
-        public int MaxTimeLineItemCount = SettingTimeLineConst.MAX_TIMELINE_COUNT;
+        private DataGridTimeLineViewSetting _TimeLineViewSetting { get; set; } = new DataGridTimeLineViewSetting();
+        public DataGridTimeLineViewSetting _ViewSetting { get { return  this._TimeLineViewSetting; } }
+        public void SetDataGridTimeLineViewSetting(DataGridTimeLineViewSetting ViewSetting)
+        {
+            _TimeLineViewSetting = ViewSetting;
+        }
+        private void OnDataGridTimeLineViewSettingChanged(object? sender, EventArgs? e)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(OnDataGridTimeLineViewSettingChanged, sender, e);
+                return;
+            }
+        }
 
         /// <summary>
         /// タイムラインの最新行を常に選択するかどうか
@@ -929,8 +941,11 @@ namespace Misstab.Common.TimeLine
                 this.Invoke(SetRowClear);
                 return;
             }
+            this.SuspendLayout();
             this.Rows.Clear();
             this._TimeLineData.Clear();
+            this.ResumeLayout(false);
+            this.Invalidate();
         }
 
         /// <summary>
@@ -1203,6 +1218,9 @@ namespace Misstab.Common.TimeLine
         {
         }
 
+        private static int _cntGlobal = 0;
+
+        private object tlsimlock = new object();
         /// <summary>
         /// 行挿入
         /// </summary>
@@ -1299,7 +1317,7 @@ namespace Misstab.Common.TimeLine
                 };
 
                 // maxを適用しつつバックアップに送る
-                if (this._TimeLineData.Count >= this.MaxTimeLineItemCount)
+                if (this._TimeLineData.Count >= _TimeLineViewSetting.MaxTimeLineItemCount && _TimeLineViewSetting.MaxTimeLineItemCount != -1)
                 {
                     foreach (TimeLineAlertOption Opt in this._AlertBackUp)
                     {
@@ -1402,7 +1420,7 @@ namespace Misstab.Common.TimeLine
                     this.Rows[RowIndex].Cells[TimeLineCreator.TIMELINE_ELEMENT.REPLAYED_DISP.ToString()].ToolTipText
                             = (bool)CellValue ? "リプライ" : "";
                     this.Rows[RowIndex].Cells[TimeLineCreator.TIMELINE_ELEMENT.REPLAYED_DISP.ToString()].Style.ForeColor
-                            = (bool)CellValue ? Color.Orange : Color.Red;
+                            = (bool)CellValue ? _TimeLineViewSetting.ForeColorReplayed : Color.Red;
                     break;
                 case (int)TimeLineCreator.TIMELINE_ELEMENT.CW:
                     if ((bool)CellValue)
@@ -1421,7 +1439,7 @@ namespace Misstab.Common.TimeLine
                             this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.PROTECTED_DISP].ToolTipText
                                     = "パブリック";
                             this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.PROTECTED_DISP].Style.ForeColor
-                                    = Color.Black;
+                                    = _TimeLineViewSetting.ForeColorPostPublic;
                             break;
                         case TimeLineContainer.PROTECTED_STATUS.SemiPublic:
                             this._TimeLineData[RowIndex].PROTECTED_DISP = _Common_Wifi;
@@ -1435,21 +1453,21 @@ namespace Misstab.Common.TimeLine
                             this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.PROTECTED_DISP].ToolTipText
                                     = "ホーム";
                             this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.PROTECTED_DISP].Style.ForeColor
-                                    = Color.Blue;
+                                    = _TimeLineViewSetting.ForeColorPostHome;
                             break;
                         case TimeLineContainer.PROTECTED_STATUS.Direct:
                             this._TimeLineData[RowIndex].PROTECTED_DISP = _Common_Direct;
                             this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.PROTECTED_DISP].ToolTipText
                                     = "ダイレクトメッセージ";
                             this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.PROTECTED_DISP].Style.ForeColor
-                                    = Color.Red;
+                                    = _TimeLineViewSetting.ForeColorPostDirect;
                             break;
                         case TimeLineContainer.PROTECTED_STATUS.Follower:
                             this._TimeLineData[RowIndex].PROTECTED_DISP = _Common_Locked;
                             this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.PROTECTED_DISP].ToolTipText
                                     = "フォロワー";
                             this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.PROTECTED_DISP].Style.ForeColor
-                                    = Color.Purple;
+                                    = _TimeLineViewSetting.ForeColorPostFollower;
                             break;
                     }
                     break;
@@ -1460,7 +1478,7 @@ namespace Misstab.Common.TimeLine
                     this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.RENOTED_DISP].ToolTipText
                             = (bool)CellValue ? "リノート" : "";
                     this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.RENOTED_DISP].Style.ForeColor
-                            = (bool)CellValue ? Color.Green : Color.Red;
+                            = (bool)CellValue ? _TimeLineViewSetting.ForeColorPostRenote : Color.White;
                     break;
                 case (int)TimeLineCreator.TIMELINE_ELEMENT.ISLOCAL:
                     this._TimeLineData[RowIndex].ISLOCAL_DISP
@@ -1469,14 +1487,14 @@ namespace Misstab.Common.TimeLine
                     this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.ISLOCAL_DISP].ToolTipText
                             = (bool)CellValue ? "ローカルのみ" : "連合";
                     this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.ISLOCAL_DISP].Style.ForeColor
-                            = (bool)CellValue ? Color.Red : Color.Green;
+                            = (bool)CellValue ? _TimeLineViewSetting.ForeColorPostIsLocal : _TimeLineViewSetting.ForeColorPostIsUnion;
                     break;
                 case (int)TimeLineCreator.TIMELINE_ELEMENT.ISCHANNEL:
                     this._TimeLineData[RowIndex].ISCHANNEL_DISP
                     //this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.ISCHANNEL_DISP].Value
                             = (bool)CellValue ? _Common_Channel : _Common_Empty;
                     this.Rows[RowIndex].Cells[(int)TimeLineCreator.TIMELINE_ELEMENT.ISCHANNEL_DISP].Style.ForeColor
-                            = (bool)CellValue ? Color.Green : Color.Red;
+                            = (bool)CellValue ? _TimeLineViewSetting.ForeColorPostIsChannel : Color.White;
                     break;
                 case (int)TimeLineCreator.TIMELINE_ELEMENT.CHANNEL_NAME:
                     if (this._TimeLineData[RowIndex].CHANNEL_NAME != null)
@@ -1524,15 +1542,15 @@ namespace Misstab.Common.TimeLine
             if (Container.RENOTED)
             {
                 // this.ChangeDispFgColorCommon(ref Row, Color.Green);
-                this.ChangeDispBgColorCommon(ref Row, Color.LightGreen);
+                this.ChangeDispBgColorCommon(ref Row, _TimeLineViewSetting.BackColorPostIsRenote);
             }
             if (Container.REPLAYED)
             {
-                this.ChangeDispBgColorCommon(ref Row, Color.Beige);
+                this.ChangeDispBgColorCommon(ref Row, _TimeLineViewSetting.BackColorPostIsReplayed);
             }
             if (Container.CW)
             {
-                this.ChangeDispBgColorCommon(ref Row, Color.LightGray);
+                this.ChangeDispBgColorCommon(ref Row, _TimeLineViewSetting.BackColorPostIsCW);
             }
         }
 
