@@ -516,6 +516,7 @@ namespace Misstab
                 Splash.instance.SetMessageAndProgress($"タイムライン読み込み：{WSTimeLine.TabName}", (int)((float)(WSTimeLines.ToList().IndexOf(WSTimeLine) + 1) / (float)WSTimeLines.Count() * 100));
                 _TLCreator.CreateTimeLineTab(ref this.MainFormObj, WSTimeLine.Definition, WSTimeLine.TabName, WSTimeLine.IsVisible);
                 _TLCreator.CreateTimeLine(ref this.MainFormObj, WSTimeLine.Definition, WSTimeLine.Definition, IsFiltered: WSTimeLine.IsFiltered);
+                _TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, WSTimeLine.Definition).SetSaveIconImages(WSTimeLine.IsSaveIcon);
                 _TLCreator.GetGrid(WSTimeLine.Definition)._FilteringOptions = WSTimeLine.FilteringOptions;
                 _TLCreator.GetGrid(WSTimeLine.Definition)._AlertOptions = WSTimeLine.AlertOptions;
                 _TmpTLManager.Add(WSTimeLine.Definition, WSTimeLine.TabName);

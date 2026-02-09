@@ -27,6 +27,7 @@ namespace Misstab.ScreenForms.DialogForm.Setting
 
         private TimeLineFilterSetting _FilterForm = new TimeLineFilterSetting();
         private TimeLineAlertSetting _AlertForm = new TimeLineAlertSetting();
+        private TimeLineOverAllSetting _OverAllForm = new TimeLineOverAllSetting();
         private APIReflexSetting _ReflexForm = new APIReflexSetting();
         private AddTimeLine _AddTLForm = new AddTimeLine();
 
@@ -110,6 +111,8 @@ namespace Misstab.ScreenForms.DialogForm.Setting
                 MessageBox.Show("エラー！");
                 return;
             }
+            this._OverAllForm.SetAlertData(this._TLGrid[SelectedCombo.TabDefinition]);
+            this._OverAllForm.ShowDialog();
         }
 
         #region イベント

@@ -882,6 +882,31 @@ namespace Misstab.Common.TimeLine
         public bool _IsUpdateTL = true;
 
         /// <summary>
+        /// 画像を保存するかどうか
+        /// </summary>
+        private bool _IsSaveIconImages { get; set; } = false;
+        public bool _IsSaveIcon { get { return _IsSaveIconImages; } }
+        /// <summary>
+        /// 画像を保存するかどうか
+        /// </summary>
+        public void SetSaveIconImages(bool value)
+        {
+            _IsSaveIconImages = value;
+            this.OnSaveIconImageChanged(this, null);
+        }
+        private void OnSaveIconImageChanged(object? sender, EventArgs? e)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(OnSaveIconImageChanged, sender, e);
+                return;
+            }
+            this.SetRowClear();
+            this.Columns[(int)TIMELINE_ELEMENT.ICON].Visible = _IsSaveIconImages;
+        }
+        private event EventHandler _SaveIconImageSettingChanged;
+
+        /// <summary>
         /// タイムラインの最大行数
         /// </summary>
         public int MaxTimeLineItemCount = SettingTimeLineConst.MAX_TIMELINE_COUNT;
@@ -896,6 +921,17 @@ namespace Misstab.Common.TimeLine
         public event EventHandler<DataGridTimeLineAddedEvent> _DataGridTimeLineAdded;
         public event EventHandler<DataGridTimeLineAddedEvent> _DataGridTimeLineAccepted;
         public event EventHandler<DataGridTimeLineUpdateEvent> _DataGridTimeLineUpdate;
+
+        public void SetRowClear()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(SetRowClear);
+                return;
+            }
+            this.Rows.Clear();
+            this._TimeLineData.Clear();
+        }
 
         /// <summary>
         /// フィルタに投稿を設定
@@ -961,6 +997,9 @@ namespace Misstab.Common.TimeLine
             this.SelectionChanged += OnSelectionChanged;
             this._DataGridTimeLineAdded += OnDataGridTimeLinePostAdded;
             this._DataGridTimeLineUpdate += OnDataGridTimeLinePostUpdate;
+            this._SaveIconImageSettingChanged += OnSaveIconImageChanged;
+
+            SettingCommon.Instance.PropertyChanged += SettingChanged;
 
             ImageCacher.Instance.ImageLoaded += OnImageLoaded;
 
@@ -1013,6 +1052,15 @@ namespace Misstab.Common.TimeLine
             ContinuousStasticsUpdate();
         }
 
+        public void SettingChanged(object? sender, EventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(SettingChanged, sender, e);
+                return;
+            }
+        }
+
         /// <summary>
         /// 統計情報の更新
         /// </summary>
@@ -1053,26 +1101,35 @@ namespace Misstab.Common.TimeLine
                 }
                 else
                 {
-                    var img = ImageCacher.Instance.TryGetImage(this._TimeLineData[e.RowIndex].USERID + (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(this._TimeLineData[e.RowIndex].ORIGINAL).Note.User.Host) ?? this._TimeLineData[e.RowIndex].ORIGINAL_HOST));
-                    if (img != null)
+                    if (this._IsSaveIcon)
                     {
-                        e.Value = img;
-                    }
-                    else
-                    {
-                        // キャッシュがなければ非同期ダウンロード開始
                         try
                         {
-                            if (this._TimeLineData[e.RowIndex].ORIGINAL != null && this._TimeLineData[e.RowIndex].ORIGINAL.ToString() != string.Empty)
+                            var img = ImageCacher.Instance.TryGetImage(this._TimeLineData[e.RowIndex].USERID + (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(this._TimeLineData[e.RowIndex].ORIGINAL).Note.User.Host) ?? this._TimeLineData[e.RowIndex].ORIGINAL_HOST));
+                            if (img != null)
                             {
-                                ImageCacher.Instance.SaveIconImage(this._TimeLineData[e.RowIndex].USERID + (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(this._TimeLineData[e.RowIndex].ORIGINAL).Note.User.Host) ?? this._TimeLineData[e.RowIndex].ORIGINAL_HOST),
-                                                                   JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(this._TimeLineData[e.RowIndex].ORIGINAL).Note.User.AvatarUrl));
+                                e.Value = img;
+                            }
+                            else
+                            {
+                                // キャッシュがなければ非同期ダウンロード開始
+                                try
+                                {
+                                    if (this._TimeLineData[e.RowIndex].ORIGINAL != null && this._TimeLineData[e.RowIndex].ORIGINAL.ToString() != string.Empty)
+                                    {
+                                        ImageCacher.Instance.SaveIconImage(this._TimeLineData[e.RowIndex].USERID + (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(this._TimeLineData[e.RowIndex].ORIGINAL).Note.User.Host) ?? this._TimeLineData[e.RowIndex].ORIGINAL_HOST),
+                                                                           JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(this._TimeLineData[e.RowIndex].ORIGINAL).Note.User.AvatarUrl));
+                                    }
+                                }
+                                catch (Exception ce)
+                                {
+                                }
+                                e.Value = null; // 仮アイコン
                             }
                         }
-                        catch(Exception ce)
+                        catch
                         {
                         }
-                        e.Value = null; // 仮アイコン
                     }
                     return;
                 }
@@ -1146,9 +1203,6 @@ namespace Misstab.Common.TimeLine
         {
         }
 
-        private static int _cntGlobal = 0;
-
-        private object tlsimlock = new object();
         /// <summary>
         /// 行挿入
         /// </summary>
@@ -1170,7 +1224,6 @@ namespace Misstab.Common.TimeLine
                 lock (this._TimeLineData)
                 {
                     _cntGlobal++;
-                    //System.Diagnostics.Debug.WriteLine(_cntGlobal);
 
                     // TL統合
                     var Intg = this._TimeLineData.Cast<TimeLineContainer>().Where(r => r.IDENTIFIED.Equals(LocalContainer.IDENTIFIED)).ToArray();
@@ -1197,15 +1250,16 @@ namespace Misstab.Common.TimeLine
                     this._TimeLineData.Add(LocalContainer);
                     this.Refresh();
                     this._TimeLineBackData.Add(LocalContainer);
-                    // ImageCacher.Instance.SaveIconImage();
-                    if (LocalContainer.ORIGINAL != null && LocalContainer.ORIGINAL.ToString() != string.Empty)
+                    if (this._IsSaveIcon)
                     {
-                        ImageCacher.Instance.SaveIconImage(LocalContainer.USERID + (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.Host) ?? LocalContainer.ORIGINAL_HOST), JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
-                        System.Diagnostics.Debug.WriteLine(JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
+                        if (LocalContainer.ORIGINAL != null && LocalContainer.ORIGINAL.ToString() != string.Empty)
+                        {
+                            ImageCacher.Instance.SaveIconImage(LocalContainer.USERID + (JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.Host) ?? LocalContainer.ORIGINAL_HOST), JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
+                            System.Diagnostics.Debug.WriteLine(JsonConverterCommon.GetStr(ChannelToTimeLineData.Get(LocalContainer.ORIGINAL).Note.User.AvatarUrl));
+                        }
                     }
 
                     // 行挿入
-                    //this.Rows.Add();
                     this.RowCount = this._TimeLineData.Count;
 
                     int CurrentRowIndex = this.RowCount - 1;
@@ -1220,39 +1274,6 @@ namespace Misstab.Common.TimeLine
                     }
                 }
 
-                // フォントは行ごとに定義する
-                // defaultだと反映されない
-                //var DefaultMaterialFont = new FontLoader().LoadFontFromFile(FontLoader.FONT_SELECTOR.MATERIALICONS, 12);
-                //this.Rows[0].Cells[(int)TIMELINE_ELEMENT.REPLAYED_DISP].Style.Font = DefaultMaterialFont;
-                //this.Rows[0].Cells[(int)TIMELINE_ELEMENT.ISLOCAL_DISP].Style.Font = DefaultMaterialFont;
-                //this.Rows[0].Cells[(int)TIMELINE_ELEMENT.PROTECTED_DISP].Style.Font = DefaultMaterialFont;
-                //this.Rows[0].Cells[(int)TIMELINE_ELEMENT.RENOTED_DISP].Style.Font = DefaultMaterialFont;
-                //this.Rows[0].Cells[(int)TIMELINE_ELEMENT.CW_DISP].Style.Font = DefaultMaterialFont;
-                //this.Rows[0].Cells[(int)TIMELINE_ELEMENT.ISCHANNEL_DISP].Style.Font = DefaultMaterialFont;
-                //DefaultMaterialFont.Dispose();
-
-                // カラム別処理
-                //foreach (string ColName in Enum.GetNames(typeof(TimeLineCreator.TIMELINE_ELEMENT)))
-                //{
-                //    var Prop = typeof(TimeLineContainer).GetProperty(ColName);
-                //    if (Prop == null)
-                //    {
-                //        continue;
-                //    }
-                //    var PropVal = Prop.GetValue(Container);
-
-                //    if (PropVal != null)
-                //    {
-                //        this.Rows[CurrentRowIndex].Cells[ColName].Value = PropVal;
-                //    }
-
-                //    this.ArrangeTimeLine(CurrentRowIndex, (int)Enum.Parse(typeof(TimeLineCreator.TIMELINE_ELEMENT), ColName));
-
-                //    var Row = this.Rows[CurrentRowIndex];
-
-                //    // 色変更
-                //    // this.ChangeDispColor(ref Row, Container);
-                //}
                 foreach (TimeLineAlertOption Opt in this._AlertTimeLine)
                 {
                     Found = Opt._FilterOptions.FindAll(r => { return r.FilterResult(); }).Count();

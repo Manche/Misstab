@@ -20,6 +20,7 @@ namespace Misstab.Common.Setting
         public int MaxTimeLineCount { get; set; } = SettingTimeLineConst.MAX_TIMELINE_COUNT;
         public required List<TimeLineFilterlingOption> FilteringOptions { get; set; }
         public required List<TimeLineAlertOption> AlertOptions { get; set; }
+        public bool IsSaveIcon { get; set; } = true;
         public static SettingTimeLine ConvertDataGridTimeLineToSettingObj(DataGridTimeLine WSTimeLine)
         {
             WSTimeLine._FilteringOptions.ForEach(r => { r._Container = null; });
@@ -34,6 +35,8 @@ namespace Misstab.Common.Setting
 
                 FilteringOptions = WSTimeLine._FilteringOptions,
                 AlertOptions = WSTimeLine._AlertOptions,
+
+                IsSaveIcon = WSTimeLine._IsSaveIcon,
             };
         }
     }

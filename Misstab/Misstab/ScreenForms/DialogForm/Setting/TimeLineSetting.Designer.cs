@@ -71,7 +71,7 @@
             cmdOpenReflexTLSetting.Name = "cmdOpenReflexTLSetting";
             cmdOpenReflexTLSetting.Size = new Size(75, 23);
             cmdOpenReflexTLSetting.TabIndex = 6;
-            cmdOpenReflexTLSetting.Text = "表示TL設定";
+            cmdOpenReflexTLSetting.Text = "環境設定";
             cmdOpenReflexTLSetting.UseVisualStyleBackColor = true;
             cmdOpenReflexTLSetting.Click += cmdOpenReflexTLSetting_Click;
             // 

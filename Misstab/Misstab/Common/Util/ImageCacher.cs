@@ -143,7 +143,7 @@ namespace Misstab.Common.Util
 
                 // ファイルサイズが極端に小さいものは破損とみなす
                 var fi = new FileInfo(path);
-                if (fi.Length < 64)
+                if (fi.Length < 16)
                     return null;
 
                 // ファイルを完全コピー（ロック回避）
