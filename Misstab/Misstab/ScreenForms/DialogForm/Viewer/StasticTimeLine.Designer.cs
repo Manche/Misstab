@@ -70,6 +70,7 @@
             Controls.Add(label1);
             Name = "StasticTimeLine";
             Text = "StasticTimeLine";
+            Load += StasticTimeLine_Load;
             VisibleChanged += StasticTimeLine_VisibleChanged;
             ResumeLayout(false);
             PerformLayout();
