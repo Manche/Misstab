@@ -42,6 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Common\Assets\Images\emoji\_empty">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Common\Assets\Images\Icon\icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -98,6 +101,7 @@
 
   <ItemGroup>
     <Folder Include="Common\AnalyzeData\Format\Misskey\v2024\" />
+    <Folder Include="Common\Assets\Images\emoji\" />
     <Folder Include="Common\Connection\REST\Misskey\v2025\API\Channels\" />
     <Folder Include="Common\Connection\WebSocket\Misskey\v11\" />
   </ItemGroup>
