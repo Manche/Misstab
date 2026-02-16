@@ -1,6 +1,7 @@
 ﻿using Misstab.Common.Connection.REST;
 using Misstab.Common.Connection.VersionInfo;
 using Misstab.Common.Connection.WebSocket.Structures;
+using Misstab.Common.Setting;
 using Misstab.ScreenForms.Controls.Combo;
 using System;
 using System.Collections.Generic;
@@ -81,11 +82,59 @@ namespace Misstab.ScreenForms.DialogForm
                 {
                 }
 
-                this._MainForm.BeginInvoke(new Action(() => _MainForm.AddTimeLine(InstanceURL: txtInstanceURL.Text,
-                                                                                  TabName: txtTabName.Text,
-                                                                                  APIKey: txtAPIKey.Text,
-                                                                                  sTLKind: ((CmbInstance)cmbTLKind.SelectedItem)._TLKind,
-                                                                                  SoftwareVersionInfo: _VerInfo)));
+                //SettingWebSocket WSManager = new SettingWebSocket();
+                //WSManager.InstanceURL = txtInstanceURL.Text;
+                //WSManager.APIKey = txtAPIKey.Text;
+                //WSManager.ConnectTimeLineKind = ((CmbInstance)cmbTLKind.SelectedItem)._TLKind;
+                //WSManager.SoftwareVersionInfo = _VerInfo;
+                //WSManager.AvoidIntg = false;
+                //WSManager.TimeLineDefinition = new string[] { };
+                //WSManager.LastUpdated = DateTime.Now.ToString();
+
+                System.Diagnostics.Debug.WriteLine("WebSocket作成");
+                // this._MainForm.LoadWebSocketManually(new SettingWebSocket[] { WSManager });
+                try
+                {
+                    Func<bool> n = () =>
+                    {
+                        if (this._MainForm.InvokeRequired)
+                        {
+                            this._MainForm.Invoke(this._MainForm.AddWebSocketManually, _VerInfo, ((CmbInstance)cmbTLKind.SelectedItem)._TLKind, txtInstanceURL.Text, txtAPIKey.Text, false, new string[] { });
+                        }
+                        else
+                        {
+                            this._MainForm.AddWebSocketManually(_VerInfo, ((CmbInstance)cmbTLKind.SelectedItem)._TLKind, txtInstanceURL.Text, txtAPIKey.Text, false, new string[] { });
+                        }
+                        if (txtTabName.Text != "")
+                        {
+                            SettingTimeLine WSTimeLine = new SettingTimeLine()
+                            {
+                                Definition = Guid.NewGuid().ToString(),
+                                TabName = this.txtTabName.Text,
+                                IsSaveIcon = false
+                            };
+                            if(this._MainForm.InvokeRequired)
+                            {
+                                this._MainForm.Invoke(this._MainForm.LoadTimeLineManually, new SettingTimeLine[] { WSTimeLine });
+                            }
+                            else
+                            {
+                                this._MainForm.LoadTimeLineManually(new SettingTimeLine[] { WSTimeLine });
+                            }
+                        }
+                        return true;
+                    };
+                    if (InvokeRequired)
+                    {
+                        this.Invoke(n);
+                        return;
+                    }
+                    n.Invoke();
+                }
+                catch(Exception ce)
+                {
+                    System.Diagnostics.Debug.WriteLine("err");
+                }
             });
         }
 

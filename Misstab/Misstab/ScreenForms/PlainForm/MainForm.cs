@@ -552,67 +552,139 @@ namespace Misstab
                 this.Invoke(LoadWebSocketManually, WSManagers);
                 return;
             }
-            Splash.instance.SetMessageAndProgress("WebSocket読み込み", 0);
-            foreach (Common.Setting.SettingWebSocket SWSManager in WSManagers)
+            try
             {
-                System.Diagnostics.Debug.WriteLine(WSManagers.ToList().IndexOf(SWSManager));
-                System.Diagnostics.Debug.WriteLine((int)((float)WSManagers.ToList().IndexOf(SWSManager) + 1 / (float)WSManagers.Count() * 100));
-                Splash.instance.SetMessageAndProgress($"タイムライン読み込み：{SWSManager.InstanceURL}", (int)((float)(WSManagers.ToList().IndexOf(SWSManager) + 1) / (float)WSManagers.Count() * 100));
-                WebSocketManager? WSManager = WebSocketTimeLineController.CreateWSTLManager(SWSManager.SoftwareVersionInfo.SoftwareType, SWSManager.SoftwareVersionInfo.Version, SWSManager.ConnectTimeLineKind);
-                if (WSManager == null)
+                Splash.instance.SetMessageAndProgress("WebSocket読み込み", 0);
+                foreach (Common.Setting.SettingWebSocket SWSManager in WSManagers)
                 {
-                    MessageBox.Show("非対応APIが使用されています。");
-                    return;
-                }
-                var WTManager = WebSocketMainController.CreateWSTLManager(WSManager.SoftwareVersion.SoftwareType, WSManager.SoftwareVersion.Version);
-                if (WTManager == null)
-                {
-                    MessageBox.Show("非対応APIが使用されています。");
-                    return;
-                }
-                try
-                {
-                    WSManager.OpenTimeLine(SWSManager.InstanceURL, SWSManager.APIKey);
-                    if (SWSManager.AvoidIntg == false)
+                    System.Diagnostics.Debug.WriteLine(WSManagers.ToList().IndexOf(SWSManager));
+                    System.Diagnostics.Debug.WriteLine((int)((float)WSManagers.ToList().IndexOf(SWSManager) + 1 / (float)WSManagers.Count() * 100));
+                    Splash.instance.SetMessageAndProgress($"タイムライン読み込み：{SWSManager.InstanceURL}", (int)((float)(WSManagers.ToList().IndexOf(SWSManager) + 1) / (float)WSManagers.Count() * 100));
+                    WebSocketManager? WSManager = WebSocketTimeLineController.CreateWSTLManager(SWSManager.SoftwareVersionInfo.SoftwareType, SWSManager.SoftwareVersionInfo.Version, SWSManager.ConnectTimeLineKind);
+                    if (WSManager == null)
                     {
-                        WSManager.SetDataGridTimeLine(_TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, "Main"));
+                        MessageBox.Show("非対応APIが使用されています。");
+                        return;
                     }
-                    foreach (string TTabDef in SWSManager.TimeLineDefinition ?? [])
+                    var WTManager = WebSocketMainController.CreateWSTLManager(WSManager.SoftwareVersion.SoftwareType, WSManager.SoftwareVersion.Version);
+                    if (WTManager == null)
                     {
-                        try
-                        {
-                            WSManager.SetDataGridTimeLine(_TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, TTabDef));
-                        }
-                        catch
-                        {
-                        }
+                        MessageBox.Show("非対応APIが使用されています。");
+                        return;
                     }
+                    this._WSManager.Add(WSManager);
                     try
                     {
-                        WSManager.ReadTimeLineContinuous(WSManager);
-
-                        if (SWSManager.APIKey != string.Empty)
+                        WSManager.OpenTimeLine(SWSManager.InstanceURL, SWSManager.APIKey);
+                        if (SWSManager.AvoidIntg == false)
                         {
-                            WTManager.OpenMain(WSManager._HostDefinition, WSManager.APIKey);
-                            WebSocketMain.ReadMainContinuous(WTManager);
+                            WSManager.SetDataGridTimeLine(_TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, "Main"));
                         }
+                        foreach (string TTabDef in SWSManager.TimeLineDefinition ?? [])
+                        {
+                            try
+                            {
+                                WSManager.SetDataGridTimeLine(_TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, TTabDef));
+                            }
+                            catch
+                            {
+                            }
+                        }
+                        try
+                        {
+                            WSManager.ReadTimeLineContinuous(WSManager);
+
+                            if (SWSManager.APIKey != string.Empty)
+                            {
+                                WTManager.OpenMain(WSManager._HostDefinition, WSManager.APIKey);
+                                WebSocketMain.ReadMainContinuous(WTManager);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine(ex.ToString());
+                        }
+                        // ここで手動で入れておく
+                        WSManager._IsOpenTimeLine = true;
+                        WSManager._LastDataReceived = DateTime.Now;
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine(ex.ToString());
+                        System.Diagnostics.Debug.WriteLine(ex);
                     }
-                    // ここで手動で入れておく
-                    WSManager._IsOpenTimeLine = true;
-                    WSManager._LastDataReceived = DateTime.Now;
+                }
+                Splash.instance.SetMessageAndProgress("WebSocket読み込み", 100);
+            }
+            catch (Exception ce)
+            {
+                System.Diagnostics.Debug.WriteLine(ce);
+            }
+        }
 
-                    this._WSManager.Add(WSManager);
+        public void AddWebSocketManually(CSoftwareVersionInfo ver,
+                                         TimeLineBasic.ConnectTimeLineKind TLKind,
+                                         string InstanceURL,
+                                         string APIKey,
+                                         bool AvoidIntg,
+                                         string[] TimeLineDefinition)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(AddWebSocketManually, ver, TLKind, InstanceURL, APIKey, AvoidIntg, TimeLineDefinition);
+                return;
+            }
+            WebSocketManager? WSManager = WebSocketTimeLineController.CreateWSTLManager(ver.SoftwareType, ver.Version, TLKind);
+            if (WSManager == null)
+            {
+                MessageBox.Show("非対応APIが使用されています。");
+                return;
+            }
+            var WTManager = WebSocketMainController.CreateWSTLManager(WSManager.SoftwareVersion.SoftwareType, WSManager.SoftwareVersion.Version);
+            if (WTManager == null)
+            {
+                MessageBox.Show("非対応APIが使用されています。");
+                return;
+            }
+            this._WSManager.Add(WSManager);
+            try
+            {
+                WSManager.OpenTimeLine(InstanceURL, APIKey);
+                if (AvoidIntg == false)
+                {
+                    WSManager.SetDataGridTimeLine(_TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, "Main"));
+                }
+                foreach (string TTabDef in TimeLineDefinition ?? [])
+                {
+                    try
+                    {
+                        WSManager.SetDataGridTimeLine(_TLCreator.GetTimeLineObjectDirect(ref this.MainFormObj, TTabDef));
+                    }
+                    catch
+                    {
+                    }
+                }
+                try
+                {
+                    WSManager.ReadTimeLineContinuous(WSManager);
+
+                    if (APIKey != string.Empty)
+                    {
+                        WTManager.OpenMain(WSManager._HostDefinition, WSManager.APIKey);
+                        WebSocketMain.ReadMainContinuous(WTManager);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex);
+                    System.Diagnostics.Debug.WriteLine(ex.ToString());
                 }
+                // ここで手動で入れておく
+                WSManager._IsOpenTimeLine = true;
+                WSManager._LastDataReceived = DateTime.Now;
             }
-            Splash.instance.SetMessageAndProgress("WebSocket読み込み", 100);
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
         }
 
         private void AppendTimelineFilter(string TabName, string AttachDef, TimeLineFilterlingOption FilterOption)
