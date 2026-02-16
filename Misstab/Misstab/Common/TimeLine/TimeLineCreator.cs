@@ -8,6 +8,7 @@ using Misstab.Common.Notification;
 using Misstab.Common.Setting;
 using Misstab.Common.TimeLine.Event;
 using Misstab.Common.TimeLine.Setting;
+using Misstab.Common.TimeLine.Stastics;
 using Misstab.Common.Util;
 using NAudio.MediaFoundation;
 using System;
@@ -17,6 +18,7 @@ using System.DirectoryServices.ActiveDirectory;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -980,13 +982,13 @@ namespace Misstab.Common.TimeLine
             { TIMELINE_ELEMENT.ICON, 20 },
             { TIMELINE_ELEMENT.USERNAME, 60 },
             { TIMELINE_ELEMENT.USERID, 60 },
-            { TIMELINE_ELEMENT.DELETED_DISP, 20 },
-            { TIMELINE_ELEMENT.REPLAYED_DISP, 20 },
-            { TIMELINE_ELEMENT.PROTECTED_DISP, 20 },
-            { TIMELINE_ELEMENT.ISLOCAL_DISP, 20 },
-            { TIMELINE_ELEMENT.RENOTED_DISP, 20 },
-            { TIMELINE_ELEMENT.CW_DISP, 20 },
-            { TIMELINE_ELEMENT.ISCHANNEL_DISP, 20 },
+            { TIMELINE_ELEMENT.DELETED_DISP, 16 },
+            { TIMELINE_ELEMENT.REPLAYED_DISP, 16 },
+            { TIMELINE_ELEMENT.PROTECTED_DISP, 16 },
+            { TIMELINE_ELEMENT.ISLOCAL_DISP, 16 },
+            { TIMELINE_ELEMENT.RENOTED_DISP, 16 },
+            { TIMELINE_ELEMENT.CW_DISP, 16 },
+            { TIMELINE_ELEMENT.ISCHANNEL_DISP, 16 },
             { TIMELINE_ELEMENT.DETAIL, 350 },
             { TIMELINE_ELEMENT.SOFTWARE, 40 },
             { TIMELINE_ELEMENT.UPDATEDAT, 140 },
@@ -1064,7 +1066,10 @@ namespace Misstab.Common.TimeLine
                 }
                 this.Columns.Add(Col);
             }
-            ContinuousStasticsUpdate();
+
+            _ = Task.Run(() => {
+                ContinuousStasticsUpdate();
+            });
         }
 
         public void SettingChanged(object? sender, EventArgs e)
@@ -1090,7 +1095,15 @@ namespace Misstab.Common.TimeLine
                     {
                         lock(_TimeLineData)
                         {
-                            DateTime? LatestUpdate = _TimeLineData.Select(d => { return d.UPDATEDAT; }).Max();
+                            Stastics.TabDefinition = this._Definition;
+                            Stastics.TabName = this._TabName;
+                            Stastics.LatestUpdate = DateTime.Now;
+
+                            Stastics.LatestPostUpdate = _TimeLineData.Select(d => { return d.UPDATEDAT; }).Max() ?? DateTime.MinValue;
+                            Stastics.NoteCount = this._TimeLineData.Count();
+                            Stastics.AllNoteCount = this._TimeLineBackData.Count();
+
+                            // Stastics.MemorySize = Marshal.SizeOf(this);
                         }
                     }
                     catch
@@ -1100,6 +1113,7 @@ namespace Misstab.Common.TimeLine
             });
             tk.Start();
         }
+        public event EventHandler<EventArgs> UpdateStastics;
 
         private void OnCellValueNeeded(object? sender, DataGridViewCellValueEventArgs e)
         {
