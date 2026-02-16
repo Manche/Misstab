@@ -233,6 +233,7 @@ namespace Misstab.Common.Setting
         public static readonly string SETTINGS_DIR = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Misstab");
         public static readonly string ALERT_DIR = "\\ALERT";
         public static readonly string NOTIFICATION_DIR = "\\ALERT";
+        public static readonly string COLOR_THEME_DIR = "\\COLOR_THEME";
         /// <summary>
         /// websocket
         /// </summary>
@@ -252,6 +253,12 @@ namespace Misstab.Common.Setting
         /// デバッグ情報
         /// </summary>
         public static readonly string DEBUG_SETTINGS_FILE = Path.Combine(SETTINGS_DIR, "settings_debug.json");
+
+        /// <summary>
+        /// カラーテーマ
+        /// </summary>
+        public static readonly string COLOR_THEME_SETTINGS_FILE = SETTINGS_DIR + COLOR_THEME_DIR;
+
         /// <summary>
         /// アラート
         /// </summary>
@@ -279,6 +286,10 @@ namespace Misstab.Common.Setting
             if (!Directory.Exists(SETTINGS_DIR + NOTIFICATION_DIR))
             {
                 Directory.CreateDirectory(SETTINGS_DIR + NOTIFICATION_DIR);
+            }
+            if (!Directory.Exists(SETTINGS_DIR + COLOR_THEME_DIR))
+            {
+                Directory.CreateDirectory(SETTINGS_DIR + COLOR_THEME_DIR);
             }
         }
     }
