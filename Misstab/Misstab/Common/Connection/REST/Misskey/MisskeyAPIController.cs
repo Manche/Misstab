@@ -16,6 +16,16 @@ namespace Misstab.Common.Connection.REST.Misskey
 {
     public class MisskeyAPIController
     {
+        public enum ControllerState
+        {
+            NotInitialized,
+            Prepare,
+            Executing,
+            Error,
+            Finish,
+        }
+        public ControllerState State { get; set; }
+
         protected MisskeyAPIConst.API_ENDPOINT _EndPoint { get; set; }
         public static MisskeyAPIController CreateInstance(MisskeyAPIConst.API_ENDPOINT EndPoint)
         {
@@ -31,17 +41,20 @@ namespace Misstab.Common.Connection.REST.Misskey
                             JsonObject? RequestBody = null,
                             Dictionary<string, string>? RequestParam = null)
         {
+            State = ControllerState.NotInitialized;
             if (MisskeyAPIConst.RequiredBearer(this._EndPoint) && (APIKey == null || APIKey == string.Empty))
             {
+                State = ControllerState.Error;
                 throw new Exception("need API token");
             }
+            State = ControllerState.Prepare;
             HttpRequestController Cnt;
             JsonNode? ResJson;
 
             Cnt = new HttpRequestController();
             Cnt.ReqeustUrl = "https://" + _Host + MisskeyAPIConst.URLPath(this._EndPoint);
             Cnt.ExecuteProcess = MisskeyAPIConst.ExecuteProcess(this._EndPoint);
-            Cnt.IsAsync = false;
+            Cnt.IsAsync = MisskeyAPIConst.IsAsync(this._EndPoint);
 
             if (MisskeyAPIConst.RequiredBearer(this._EndPoint))
             {
@@ -56,16 +69,29 @@ namespace Misstab.Common.Connection.REST.Misskey
             {
                 Cnt.RequestBody = "{}";
             }
+            State = ControllerState.Executing;
             Cnt.ExecuteMethod();
             try
             {
-                RetNode = JsonNode.Parse(Cnt.HttpResponseBody);
-
-                System.Diagnostics.Debug.WriteLine(new Common.AnalyzeData.Format.Misskey.v2025.Note() { Node = RetNode });
+                if (!Cnt.IsAsync)
+                {
+                    RetNode = JsonNode.Parse(Cnt.HttpResponseBody);
+                }
+                else
+                {
+                    while (Cnt.HttpResponseBody == null)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                    RetNode = JsonNode.Parse(Cnt.HttpResponseBody);
+                }
+                // System.Diagnostics.Debug.WriteLine(new Common.AnalyzeData.Format.Misskey.v2025.Note() { Node = RetNode });
             }
             catch (Exception ex)
             {
+                State = ControllerState.Error;
             }
+            State = ControllerState.Finish;
         }
 
         public virtual Common.AnalyzeData.Format.Misskey.v2025.Note[]? GetNotes()
@@ -110,7 +136,8 @@ namespace Misstab.Common.Connection.REST.Misskey
         public enum API_ENDPOINT
         {
             NOTES_TIMELINE = 0,
-            NOTES
+            NOTES,
+            NOTES_CREATE,
         }
 
         public static bool RequiredBearer (API_ENDPOINT EndPoint)
@@ -119,6 +146,7 @@ namespace Misstab.Common.Connection.REST.Misskey
             {
                 case API_ENDPOINT.NOTES_TIMELINE: return true;
                 case API_ENDPOINT.NOTES: return true;
+                case API_ENDPOINT.NOTES_CREATE: return true;
                 default: return false;
             }
         }
@@ -129,7 +157,22 @@ namespace Misstab.Common.Connection.REST.Misskey
             {
                 case API_ENDPOINT.NOTES_TIMELINE: return APIPrefix + "/notes/timeline";
                 case API_ENDPOINT.NOTES: return APIPrefix + "/notes/show";
+                case API_ENDPOINT.NOTES_CREATE: return APIPrefix + "/notes/create";
                 default: throw new NotImplementedException("NotImplemented");
+            }
+        }
+
+        public static bool IsAsync(API_ENDPOINT EndPoint)
+        {
+            switch (EndPoint)
+            {
+                case API_ENDPOINT.NOTES:
+                case API_ENDPOINT.NOTES_TIMELINE:
+                    return false;
+                case API_ENDPOINT.NOTES_CREATE:
+                    return true;
+                default:
+                    return true;
             }
         }
 
@@ -139,6 +182,7 @@ namespace Misstab.Common.Connection.REST.Misskey
             {
                 case API_ENDPOINT.NOTES_TIMELINE:
                 case API_ENDPOINT.NOTES:
+                case API_ENDPOINT.NOTES_CREATE:
                     return HttpRequestController.EXECUTE_PROCESS.POST;
                 default:
                     throw new NotImplementedException("NotImplemented");
@@ -149,8 +193,9 @@ namespace Misstab.Common.Connection.REST.Misskey
         {
             switch (EndPoint)
             {
-                case API_ENDPOINT.NOTES_TIMELINE: return new Misskey.v2025.API.Notes.TimeLine();
                 case API_ENDPOINT.NOTES: return new Misskey.v2025.API.Notes.Notes();
+                case API_ENDPOINT.NOTES_TIMELINE: return new Misskey.v2025.API.Notes.TimeLine();
+                case API_ENDPOINT.NOTES_CREATE: return new Misskey.v2025.API.Notes.CreateNotes();
                 default: throw new NotImplementedException("notimplemented");
             }
         }

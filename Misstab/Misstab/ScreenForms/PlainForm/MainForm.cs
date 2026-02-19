@@ -135,7 +135,7 @@ namespace Misstab
 
             _ = Task.Run(async () =>
             {
-                while(true)
+                while (true)
                 {
                     await Task.Delay(1000 * 60);
                     await AutoConfigDmp();
@@ -536,7 +536,7 @@ namespace Misstab
                 }
                 try
                 {
-                    _TLCreator.GetGrid(WSTimeLine.Definition).SetDataGridTimeLineViewSetting(WSTimeLine.ViewSetting??new Common.TimeLine.Setting.DataGridTimeLineViewSetting());
+                    _TLCreator.GetGrid(WSTimeLine.Definition).SetDataGridTimeLineViewSetting(WSTimeLine.ViewSetting ?? new Common.TimeLine.Setting.DataGridTimeLineViewSetting());
                 }
                 catch
                 {
@@ -1128,6 +1128,108 @@ namespace Misstab
         private void chkAutoBelowScroll_CheckedChanged(object sender, EventArgs e)
         {
             SettingState.Instance.IsAutoBelow = chkAutoBelowScroll.Checked;
+        }
+
+        private void cmdPost_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void cmbInstanceSelect_Click(object sender, EventArgs e)
+        {
+            var bf = ((CmbAPIPostList)this.cmbInstanceSelect.SelectedItem);
+            this.cmbInstanceSelect.Items.Clear();
+
+            foreach (var i in this._WSManager)
+            {
+                if (i.TLKind != TimeLineBasic.ConnectTimeLineKind.Home)
+                {
+                    continue;
+                }
+                this.cmbInstanceSelect.Items.Add(new CmbAPIPostList(this._WSManager.IndexOf(i), i));
+            }
+
+            if (bf != null)
+            {
+                this.cmbInstanceSelect.SelectedItem = bf;
+            }
+        }
+
+        private void cmbDisplay_Click(object sender, EventArgs e)
+        {
+            var bf = (CmbVisibility)this.cmbDisplay.SelectedItem;
+            this.cmbDisplay.Items.Clear();
+
+            this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Public));
+            this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Home));
+            this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Follower));
+            // this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Direct));
+
+            if (bf != null)
+            {
+                this.cmbDisplay.SelectedItem = bf;
+            }
+        }
+
+        private void cmbChannel_Click(object sender, EventArgs e)
+        {
+            this.cmbChannel.Items.Clear();
+        }
+
+        private List<CmbGeneric> _InstanceChannel = new List<CmbGeneric>();
+        private void cmbInstanceSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.cmbInstanceSelect.SelectedItem == null)
+            {
+                // ‹N‚«‚È‚¢‚Í‚¸
+                return;
+            }
+
+            // ‚Ç‚¤‚µ‚æ‚¤‚©
+            int InternalKey = ((CmbAPIPostList)this.cmbInstanceSelect.SelectedItem).InternalKey;
+            string Host = ((CmbAPIPostList)this.cmbInstanceSelect.SelectedItem).Host;
+
+            var ii = this._WSManager.FindAll(r => { return r._HostDefinition == Host; });
+            if (ii.Count == 0)
+            {
+                return;
+            }
+        }
+
+        private void cmbDisplay_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.Control &&
+                e.KeyCode == Keys.Enter)
+            {
+                if (this.cmbInstanceSelect.SelectedItem == null)
+                {
+                    // ‹N‚«‚È‚¢‚Í‚¸
+                    return;
+                }
+
+                // ‚Ç‚¤‚µ‚æ‚¤‚©
+                int InternalKey = ((CmbAPIPostList)this.cmbInstanceSelect.SelectedItem).InternalKey;
+                string Host = ((CmbAPIPostList)this.cmbInstanceSelect.SelectedItem).Host;
+
+                var ii = this._WSManager.FindAll(r => { return r._HostDefinition == Host; });
+                if (ii.Count == 0)
+                {
+                    return;
+                }
+                if (ii[0].APIKey == null)
+                {
+                    return;
+                }
+                CreateNotes.EasyPostNote(this.textBox1.Text, Host, ii[0].APIKey);
+                this.textBox1.Text = "";
+            }
         }
     }
 }

@@ -20,5 +20,14 @@ namespace Misstab.Common.Connection.WebSocket
             Social,
             Global,
         }
+
+        public static Dictionary<ConnectTimeLineKind, string> TimeLineDisplay = new Dictionary<ConnectTimeLineKind, string>()
+        {
+            { ConnectTimeLineKind.None, "None" },
+            { ConnectTimeLineKind.Home, "ホーム" },
+            { ConnectTimeLineKind.Local, "ローカル" },
+            { ConnectTimeLineKind.Social, "ソーシャル" },
+            { ConnectTimeLineKind.Global, "グローバル" }
+        };
     }
 }

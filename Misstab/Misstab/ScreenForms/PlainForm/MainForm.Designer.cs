@@ -60,6 +60,9 @@ namespace Misstab
             chkMuteSound = new CheckBox();
             chkAutoBelowScroll = new CheckBox();
             lblPostDescription = new Label();
+            cmbDisplay = new ComboBox();
+            cmbChannel = new ComboBox();
+            cmdPost = new Button();
             menuStrip1.SuspendLayout();
             tbMain.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -135,7 +138,7 @@ namespace Misstab
             tbMain.Multiline = true;
             tbMain.Name = "tbMain";
             tbMain.SelectedIndex = 0;
-            tbMain.Size = new Size(784, 242);
+            tbMain.Size = new Size(784, 342);
             tbMain.TabIndex = 1;
             // 
             // tpMain
@@ -143,7 +146,7 @@ namespace Misstab
             tpMain.Location = new Point(4, 4);
             tpMain.Name = "tpMain";
             tpMain.Padding = new Padding(3);
-            tpMain.Size = new Size(776, 214);
+            tpMain.Size = new Size(776, 314);
             tpMain.TabIndex = 0;
             tpMain.Text = "統合TL";
             tpMain.UseVisualStyleBackColor = true;
@@ -151,7 +154,7 @@ namespace Misstab
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { tsLabelMain, tsLabelNoteCount });
-            statusStrip1.Location = new Point(0, 651);
+            statusStrip1.Location = new Point(0, 777);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(784, 22);
             statusStrip1.TabIndex = 2;
@@ -173,25 +176,30 @@ namespace Misstab
             // textBox1
             // 
             textBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            textBox1.Location = new Point(0, 537);
+            textBox1.Location = new Point(0, 637);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(784, 59);
             textBox1.TabIndex = 3;
+            textBox1.KeyDown += textBox1_KeyDown;
+            textBox1.KeyPress += textBox1_KeyPress;
             // 
             // cmbInstanceSelect
             // 
             cmbInstanceSelect.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            cmbInstanceSelect.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbInstanceSelect.FormattingEnabled = true;
-            cmbInstanceSelect.Location = new Point(466, 625);
+            cmbInstanceSelect.Location = new Point(0, 717);
             cmbInstanceSelect.Name = "cmbInstanceSelect";
             cmbInstanceSelect.Size = new Size(314, 23);
             cmbInstanceSelect.TabIndex = 4;
+            cmbInstanceSelect.SelectedIndexChanged += cmbInstanceSelect_SelectedIndexChanged;
+            cmbInstanceSelect.Click += cmbInstanceSelect_Click;
             // 
             // cmdAddInstance
             // 
-            cmdAddInstance.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            cmdAddInstance.Location = new Point(4, 624);
+            cmdAddInstance.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            cmdAddInstance.Location = new Point(674, 726);
             cmdAddInstance.Name = "cmdAddInstance";
             cmdAddInstance.Size = new Size(106, 23);
             cmdAddInstance.TabIndex = 7;
@@ -207,9 +215,9 @@ namespace Misstab
             pnMain.Controls.Add(lblSoftware);
             pnMain.Controls.Add(lblUpdatedAt);
             pnMain.Controls.Add(lblUser);
-            pnMain.Location = new Point(0, 275);
+            pnMain.Location = new Point(0, 375);
             pnMain.Name = "pnMain";
-            pnMain.Size = new Size(784, 153);
+            pnMain.Size = new Size(784, 155);
             pnMain.TabIndex = 8;
             // 
             // txtDetail
@@ -269,7 +277,7 @@ namespace Misstab
             // 
             pnSub.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnSub.Controls.Add(tabControl1);
-            pnSub.Location = new Point(0, 430);
+            pnSub.Location = new Point(0, 530);
             pnSub.Name = "pnSub";
             pnSub.Size = new Size(784, 108);
             pnSub.TabIndex = 9;
@@ -282,7 +290,7 @@ namespace Misstab
             tabControl1.Location = new Point(1, 6);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(780, 102);
+            tabControl1.Size = new Size(780, 99);
             tabControl1.TabIndex = 0;
             // 
             // tpNotification
@@ -290,7 +298,7 @@ namespace Misstab
             tpNotification.Location = new Point(4, 24);
             tpNotification.Name = "tpNotification";
             tpNotification.Padding = new Padding(3);
-            tpNotification.Size = new Size(772, 74);
+            tpNotification.Size = new Size(772, 71);
             tpNotification.TabIndex = 0;
             tpNotification.Text = "通知";
             tpNotification.UseVisualStyleBackColor = true;
@@ -300,15 +308,16 @@ namespace Misstab
             tpDebug.Location = new Point(4, 24);
             tpDebug.Name = "tpDebug";
             tpDebug.Padding = new Padding(3);
-            tpDebug.Size = new Size(772, 74);
+            tpDebug.Size = new Size(772, 71);
             tpDebug.TabIndex = 1;
             tpDebug.Text = "デバッグ";
             tpDebug.UseVisualStyleBackColor = true;
             // 
             // chkMuteSound
             // 
+            chkMuteSound.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             chkMuteSound.AutoSize = true;
-            chkMuteSound.Location = new Point(116, 627);
+            chkMuteSound.Location = new Point(541, 755);
             chkMuteSound.Name = "chkMuteSound";
             chkMuteSound.Size = new Size(93, 19);
             chkMuteSound.TabIndex = 10;
@@ -318,8 +327,9 @@ namespace Misstab
             // 
             // chkAutoBelowScroll
             // 
+            chkAutoBelowScroll.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             chkAutoBelowScroll.AutoSize = true;
-            chkAutoBelowScroll.Location = new Point(215, 627);
+            chkAutoBelowScroll.Location = new Point(640, 755);
             chkAutoBelowScroll.Name = "chkAutoBelowScroll";
             chkAutoBelowScroll.Size = new Size(140, 19);
             chkAutoBelowScroll.TabIndex = 10;
@@ -329,24 +339,62 @@ namespace Misstab
             // 
             // lblPostDescription
             // 
+            lblPostDescription.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblPostDescription.AutoSize = true;
-            lblPostDescription.Location = new Point(4, 601);
+            lblPostDescription.Location = new Point(0, 699);
             lblPostDescription.Name = "lblPostDescription";
             lblPostDescription.Size = new Size(38, 15);
             lblPostDescription.TabIndex = 11;
             lblPostDescription.Text = "label1";
             // 
+            // cmbDisplay
+            // 
+            cmbDisplay.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            cmbDisplay.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbDisplay.FormattingEnabled = true;
+            cmbDisplay.Location = new Point(320, 717);
+            cmbDisplay.Name = "cmbDisplay";
+            cmbDisplay.Size = new Size(110, 23);
+            cmbDisplay.TabIndex = 4;
+            cmbDisplay.SelectedIndexChanged += cmbDisplay_SelectedIndexChanged;
+            cmbDisplay.Click += cmbDisplay_Click;
+            // 
+            // cmbChannel
+            // 
+            cmbChannel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            cmbChannel.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbChannel.FormattingEnabled = true;
+            cmbChannel.Location = new Point(0, 746);
+            cmbChannel.Name = "cmbChannel";
+            cmbChannel.Size = new Size(314, 23);
+            cmbChannel.TabIndex = 4;
+            cmbChannel.Click += cmbChannel_Click;
+            // 
+            // cmdPost
+            // 
+            cmdPost.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            cmdPost.Location = new Point(436, 717);
+            cmdPost.Name = "cmdPost";
+            cmdPost.Size = new Size(106, 23);
+            cmdPost.TabIndex = 7;
+            cmdPost.Text = "インスタンス追加";
+            cmdPost.UseVisualStyleBackColor = true;
+            cmdPost.Click += cmdPost_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(784, 673);
+            ClientSize = new Size(784, 799);
             Controls.Add(lblPostDescription);
             Controls.Add(chkAutoBelowScroll);
             Controls.Add(chkMuteSound);
             Controls.Add(pnSub);
             Controls.Add(pnMain);
+            Controls.Add(cmdPost);
             Controls.Add(cmdAddInstance);
+            Controls.Add(cmbChannel);
+            Controls.Add(cmbDisplay);
             Controls.Add(cmbInstanceSelect);
             Controls.Add(textBox1);
             Controls.Add(statusStrip1);
@@ -402,5 +450,8 @@ namespace Misstab
         private CheckBox chkMuteSound;
         private CheckBox chkAutoBelowScroll;
         private Label lblPostDescription;
+        private ComboBox cmbDisplay;
+        private ComboBox cmbChannel;
+        private Button cmdPost;
     }
 }
