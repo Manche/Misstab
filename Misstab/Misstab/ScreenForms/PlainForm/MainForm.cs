@@ -1227,7 +1227,7 @@ namespace Misstab
                 {
                     return;
                 }
-                CreateNotes.EasyPostNote(this.textBox1.Text, Host, ii[0].APIKey);
+                CreateNotes.EasyPostNote(this.textBox1.Text, Host, ii[0].APIKey, ((CmbVisibility)this.cmbDisplay.SelectedItem).TLKind);
                 this.textBox1.Text = "";
             }
         }

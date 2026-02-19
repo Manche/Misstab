@@ -138,7 +138,7 @@ namespace Misstab
             tbMain.Multiline = true;
             tbMain.Name = "tbMain";
             tbMain.SelectedIndex = 0;
-            tbMain.Size = new Size(784, 342);
+            tbMain.Size = new Size(784, 425);
             tbMain.TabIndex = 1;
             // 
             // tpMain
@@ -146,7 +146,7 @@ namespace Misstab
             tpMain.Location = new Point(4, 4);
             tpMain.Name = "tpMain";
             tpMain.Padding = new Padding(3);
-            tpMain.Size = new Size(776, 314);
+            tpMain.Size = new Size(776, 397);
             tpMain.TabIndex = 0;
             tpMain.Text = "統合TL";
             tpMain.UseVisualStyleBackColor = true;
@@ -154,7 +154,7 @@ namespace Misstab
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { tsLabelMain, tsLabelNoteCount });
-            statusStrip1.Location = new Point(0, 777);
+            statusStrip1.Location = new Point(0, 916);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(784, 22);
             statusStrip1.TabIndex = 2;
@@ -176,7 +176,7 @@ namespace Misstab
             // textBox1
             // 
             textBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            textBox1.Location = new Point(0, 637);
+            textBox1.Location = new Point(0, 776);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(784, 59);
@@ -189,7 +189,7 @@ namespace Misstab
             cmbInstanceSelect.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             cmbInstanceSelect.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbInstanceSelect.FormattingEnabled = true;
-            cmbInstanceSelect.Location = new Point(0, 717);
+            cmbInstanceSelect.Location = new Point(0, 856);
             cmbInstanceSelect.Name = "cmbInstanceSelect";
             cmbInstanceSelect.Size = new Size(314, 23);
             cmbInstanceSelect.TabIndex = 4;
@@ -199,7 +199,7 @@ namespace Misstab
             // cmdAddInstance
             // 
             cmdAddInstance.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            cmdAddInstance.Location = new Point(674, 726);
+            cmdAddInstance.Location = new Point(674, 865);
             cmdAddInstance.Name = "cmdAddInstance";
             cmdAddInstance.Size = new Size(106, 23);
             cmdAddInstance.TabIndex = 7;
@@ -215,7 +215,7 @@ namespace Misstab
             pnMain.Controls.Add(lblSoftware);
             pnMain.Controls.Add(lblUpdatedAt);
             pnMain.Controls.Add(lblUser);
-            pnMain.Location = new Point(0, 375);
+            pnMain.Location = new Point(0, 452);
             pnMain.Name = "pnMain";
             pnMain.Size = new Size(784, 155);
             pnMain.TabIndex = 8;
@@ -277,7 +277,7 @@ namespace Misstab
             // 
             pnSub.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnSub.Controls.Add(tabControl1);
-            pnSub.Location = new Point(0, 530);
+            pnSub.Location = new Point(0, 608);
             pnSub.Name = "pnSub";
             pnSub.Size = new Size(784, 108);
             pnSub.TabIndex = 9;
@@ -317,7 +317,7 @@ namespace Misstab
             // 
             chkMuteSound.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             chkMuteSound.AutoSize = true;
-            chkMuteSound.Location = new Point(541, 755);
+            chkMuteSound.Location = new Point(541, 894);
             chkMuteSound.Name = "chkMuteSound";
             chkMuteSound.Size = new Size(93, 19);
             chkMuteSound.TabIndex = 10;
@@ -329,7 +329,7 @@ namespace Misstab
             // 
             chkAutoBelowScroll.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             chkAutoBelowScroll.AutoSize = true;
-            chkAutoBelowScroll.Location = new Point(640, 755);
+            chkAutoBelowScroll.Location = new Point(640, 894);
             chkAutoBelowScroll.Name = "chkAutoBelowScroll";
             chkAutoBelowScroll.Size = new Size(140, 19);
             chkAutoBelowScroll.TabIndex = 10;
@@ -341,7 +341,7 @@ namespace Misstab
             // 
             lblPostDescription.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblPostDescription.AutoSize = true;
-            lblPostDescription.Location = new Point(0, 699);
+            lblPostDescription.Location = new Point(0, 838);
             lblPostDescription.Name = "lblPostDescription";
             lblPostDescription.Size = new Size(38, 15);
             lblPostDescription.TabIndex = 11;
@@ -352,7 +352,7 @@ namespace Misstab
             cmbDisplay.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             cmbDisplay.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDisplay.FormattingEnabled = true;
-            cmbDisplay.Location = new Point(320, 717);
+            cmbDisplay.Location = new Point(320, 856);
             cmbDisplay.Name = "cmbDisplay";
             cmbDisplay.Size = new Size(110, 23);
             cmbDisplay.TabIndex = 4;
@@ -364,7 +364,7 @@ namespace Misstab
             cmbChannel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             cmbChannel.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbChannel.FormattingEnabled = true;
-            cmbChannel.Location = new Point(0, 746);
+            cmbChannel.Location = new Point(0, 885);
             cmbChannel.Name = "cmbChannel";
             cmbChannel.Size = new Size(314, 23);
             cmbChannel.TabIndex = 4;
@@ -373,7 +373,7 @@ namespace Misstab
             // cmdPost
             // 
             cmdPost.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            cmdPost.Location = new Point(436, 717);
+            cmdPost.Location = new Point(436, 856);
             cmdPost.Name = "cmdPost";
             cmdPost.Size = new Size(106, 23);
             cmdPost.TabIndex = 7;
@@ -385,7 +385,7 @@ namespace Misstab
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(784, 799);
+            ClientSize = new Size(784, 938);
             Controls.Add(lblPostDescription);
             Controls.Add(chkAutoBelowScroll);
             Controls.Add(chkMuteSound);

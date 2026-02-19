@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Misstab.Common.TimeLine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,47 +46,40 @@ namespace Misstab.Common.Connection.REST.Misskey.v2025.API.Notes
         public string? renoteId { get; set; }
         public string? replyId { get; set; }
         public string? text { get; set; }
-        public enum Visibilities
-        {
-            Public,
-            Home,
-            Followers,
-            Specified
-        }
-        public readonly Dictionary<Visibilities, string> VisibilityNames =
-            new Dictionary<Visibilities, string>()
+        [JsonIgnore]
+        public TimeLineContainer.PROTECTED_STATUS VisibilityRaw { get; set; } = TimeLineContainer.PROTECTED_STATUS.Public;
+        [JsonIgnore]
+        public readonly Dictionary<TimeLineContainer.PROTECTED_STATUS, string> VisibilityNames =
+            new Dictionary<TimeLineContainer.PROTECTED_STATUS, string>()
             {
-                {Visibilities.Public, "Public" },
-                {Visibilities.Home, "Home"},
-                {Visibilities.Followers, "Followers" },
-                {Visibilities.Specified, "Specified" },
+                {TimeLineContainer.PROTECTED_STATUS.Public, "public" },
+                {TimeLineContainer.PROTECTED_STATUS.Home, "home"},
+                {TimeLineContainer.PROTECTED_STATUS.Follower, "followers" },
+                {TimeLineContainer.PROTECTED_STATUS.Direct, "specified" },
             };
-        public string? visibility { get; set; } = "public";
-        public JsonObject CreateRequestBody(string Text)
+        public string? visibility { get { return VisibilityNames[VisibilityRaw]; } }
+        public JsonObject CreateRequestBody()
         {
-            var i = new CreateNotes();
-            i.text = Text;
-
-            var j = JsonNode.Parse(JsonSerializer.Serialize(i))?.AsObject();
+            var j = JsonNode.Parse(JsonSerializer.Serialize(this))?.AsObject();
 
             List<string> v;
-            v = i.fileIds.Distinct().Where(r => !string.IsNullOrEmpty(r)).ToList();
-            i.fileIds = v.ToArray();
-            v = i.mediaIds.Distinct().Where(r => !string.IsNullOrEmpty(r)).ToList();
-            i.mediaIds = v.ToArray();
+            v = this.fileIds.Distinct().Where(r => !string.IsNullOrEmpty(r)).ToList();
+            this.fileIds = v.ToArray();
+            v = this.mediaIds.Distinct().Where(r => !string.IsNullOrEmpty(r)).ToList();
+            this.mediaIds = v.ToArray();
 
 
 
 
 
 
-            v = i.fileIds.Distinct().Where(r => !string.IsNullOrEmpty(r)).ToList();
+            v = this.fileIds.Distinct().Where(r => !string.IsNullOrEmpty(r)).ToList();
             if (v.Count == 0)
             {
                 j.Remove("fileIds");
             }
 
-            v = i.mediaIds.Distinct().Where(r => !string.IsNullOrEmpty(r)).ToList();
+            v = this.mediaIds.Distinct().Where(r => !string.IsNullOrEmpty(r)).ToList();
             if (v.Count == 0)
             {
                 j.Remove("mediaIds");
@@ -94,13 +88,16 @@ namespace Misstab.Common.Connection.REST.Misskey.v2025.API.Notes
             return j;
         }
 
-        public static bool EasyPostNote(string Text, string Host, string APIKey)
+        public static bool EasyPostNote(string Text, string Host, string APIKey, TimeLineContainer.PROTECTED_STATUS Kind)
         {
             var i = new CreateNotes();
+            i.text = Text;
+            i.VisibilityRaw = Kind;
+
             var Ctl = MisskeyAPIController.CreateInstance(MisskeyAPIConst.API_ENDPOINT.NOTES_CREATE);
             try
             {
-                Ctl.Request(Host, APIKey, i.CreateRequestBody(Text));
+                Ctl.Request(Host, APIKey, i.CreateRequestBody());
             }
             catch (Exception ex)
             {
