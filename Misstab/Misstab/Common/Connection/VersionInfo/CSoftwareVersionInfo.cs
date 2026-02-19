@@ -48,6 +48,11 @@ namespace Misstab.Common.Connection.VersionInfo
         {
             SoftwareType = _DefaultSoftwareType;
         }
+
+        public override string ToString()
+        {
+            return SoftwareName + "：" + Version.ToString();
+        }
     }
 
     public class VersionAttribute
@@ -57,5 +62,10 @@ namespace Misstab.Common.Connection.VersionInfo
         public int MinorVersion { get; set; } = 0;
         public int Revision { get; set; } = 0;
         public int BuildVersion { get; set; } = 0;
+
+        public override string ToString()
+        {
+            return RawVersion;
+        }
     }
 }
