@@ -88,8 +88,18 @@ namespace Misstab.Common.Connection.REST.Misskey.v2025.API.Notes
             return j;
         }
 
-        public static bool EasyPostNote(string Text, string Host, string APIKey, TimeLineContainer.PROTECTED_STATUS Kind)
+        /// <summary>
+        /// シンプルにnoteするメソッド
+        /// </summary>
+        /// <param name="Text"></param>
+        /// <param name="Host"></param>
+        /// <param name="APIKey"></param>
+        /// <param name="Kind"></param>
+        /// <param name="ResultMsg"></param>
+        /// <returns></returns>
+        public static bool EasyPostNote(string Text, string Host, string APIKey, TimeLineContainer.PROTECTED_STATUS Kind, out string ResultMsg)
         {
+            ResultMsg = string.Empty;
             var i = new CreateNotes();
             i.text = Text;
             i.VisibilityRaw = Kind;

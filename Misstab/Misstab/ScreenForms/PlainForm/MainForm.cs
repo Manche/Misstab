@@ -1136,38 +1136,38 @@ namespace Misstab
 
         private void cmbInstanceSelect_Click(object sender, EventArgs e)
         {
-            var bf = ((CmbAPIPostList)this.cmbInstanceSelect.SelectedItem);
-            this.cmbInstanceSelect.Items.Clear();
-
-            foreach (var i in this._WSManager)
+            if (this.cmbInstanceSelect.Items.Count != this._WSManager.Count)
             {
-                if (i.TLKind != TimeLineBasic.ConnectTimeLineKind.Home)
+                this.cmbInstanceSelect.Items.Clear();
+
+                foreach (var i in this._WSManager)
                 {
-                    continue;
+                    if (i.TLKind != TimeLineBasic.ConnectTimeLineKind.Home)
+                    {
+                        continue;
+                    }
+                    this.cmbInstanceSelect.Items.Add(new CmbAPIPostList(this._WSManager.IndexOf(i), i));
                 }
-                this.cmbInstanceSelect.Items.Add(new CmbAPIPostList(this._WSManager.IndexOf(i), i));
-            }
-
-            if (bf != null)
-            {
-                this.cmbInstanceSelect.SelectedItem = bf;
             }
         }
 
         private void cmbDisplay_Click(object sender, EventArgs e)
         {
-            var bf = (CmbVisibility)this.cmbDisplay.SelectedItem;
-            this.cmbDisplay.Items.Clear();
-
-            this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Public));
-            this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Home));
-            this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Follower));
-            // this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Direct));
-
-            if (bf != null)
+            if (this.cmbDisplay.Items.Count == 0)
             {
-                this.cmbDisplay.SelectedItem = bf;
+                this.cmbDisplay.Items.Clear();
+                this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Public));
+                this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Home));
+                this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Follower));
             }
+            //var bf = (CmbVisibility)this.cmbDisplay.SelectedItem;
+
+            //// this.cmbDisplay.Items.Add(new CmbVisibility(TimeLineContainer.PROTECTED_STATUS.Direct));
+
+            //if (bf != null)
+            //{
+            //    this.cmbDisplay.SelectedItem = bf;
+            //}
         }
 
         private void cmbChannel_Click(object sender, EventArgs e)
@@ -1208,28 +1208,43 @@ namespace Misstab
             if (e.Modifiers == Keys.Control &&
                 e.KeyCode == Keys.Enter)
             {
-                if (this.cmbInstanceSelect.SelectedItem == null)
-                {
-                    // ‹N‚«‚È‚¢‚Í‚¸
-                    return;
-                }
-
-                // ‚Ç‚¤‚µ‚æ‚¤‚©
-                int InternalKey = ((CmbAPIPostList)this.cmbInstanceSelect.SelectedItem).InternalKey;
-                string Host = ((CmbAPIPostList)this.cmbInstanceSelect.SelectedItem).Host;
-
-                var ii = this._WSManager.FindAll(r => { return r._HostDefinition == Host; });
-                if (ii.Count == 0)
-                {
-                    return;
-                }
-                if (ii[0].APIKey == null)
-                {
-                    return;
-                }
-                CreateNotes.EasyPostNote(this.textBox1.Text, Host, ii[0].APIKey, ((CmbVisibility)this.cmbDisplay.SelectedItem).TLKind);
-                this.textBox1.Text = "";
+                PostNote();
             }
+        }
+
+        private void PostNote()
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(PostNote);
+                return;
+            }
+            if (this.cmbInstanceSelect.SelectedItem == null)
+            {
+                // ‹N‚«‚È‚¢‚Í‚¸
+                return;
+            }
+            // ‚Ç‚¤‚µ‚æ‚¤‚©
+            int InternalKey = ((CmbAPIPostList)this.cmbInstanceSelect.SelectedItem).InternalKey;
+            string Host = ((CmbAPIPostList)this.cmbInstanceSelect.SelectedItem).Host;
+
+            var ii = this._WSManager.FindAll(r => { return r._HostDefinition == Host; });
+            if (ii.Count == 0)
+            {
+                return;
+            }
+            if (ii[0].APIKey == null)
+            {
+                return;
+            }
+            var TextPost = this.textBox1.Text;
+            var PostVisibility = ((CmbVisibility)this.cmbDisplay.SelectedItem).TLKind;
+
+            _ = Task.Run(() =>
+            {
+                CreateNotes.EasyPostNote(TextPost, Host, ii[0].APIKey, PostVisibility, out _);
+            });
+            this.textBox1.Text = null;
         }
     }
 }
