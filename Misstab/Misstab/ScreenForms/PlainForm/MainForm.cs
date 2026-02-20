@@ -70,12 +70,6 @@ namespace Misstab
 
             this.MainFormObj = this;
 
-            // ç°ÇÃÇ∆Ç±ÇÎí ímÇï\é¶ÇµÇ»Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
-            this.pnSub.Visible = false;
-            this.pnMain.Location = new Point(this.pnMain.Location.X, this.pnMain.Location.Y + this.pnSub.Size.Height);
-            this.tabControl1.Size = new Size(this.tabControl1.Size.Width, this.tabControl1.Size.Height + this.pnSub.Size.Height);
-            this.tbMain.Size = new Size(this.tbMain.Size.Width, this.tbMain.Size.Height + this.pnSub.Size.Height);
-
             // ê‡ñæóì
             this.lblPostDescription.Text = string.Empty;
 

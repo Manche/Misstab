@@ -53,10 +53,6 @@ namespace Misstab
             lblSoftware = new Label();
             lblUpdatedAt = new Label();
             lblUser = new Label();
-            pnSub = new Panel();
-            tabControl1 = new TabControl();
-            tpNotification = new TabPage();
-            tpDebug = new TabPage();
             chkMuteSound = new CheckBox();
             chkAutoBelowScroll = new CheckBox();
             lblPostDescription = new Label();
@@ -67,8 +63,6 @@ namespace Misstab
             tbMain.SuspendLayout();
             statusStrip1.SuspendLayout();
             pnMain.SuspendLayout();
-            pnSub.SuspendLayout();
-            tabControl1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -138,7 +132,7 @@ namespace Misstab
             tbMain.Multiline = true;
             tbMain.Name = "tbMain";
             tbMain.SelectedIndex = 0;
-            tbMain.Size = new Size(784, 425);
+            tbMain.Size = new Size(784, 548);
             tbMain.TabIndex = 1;
             // 
             // tpMain
@@ -146,7 +140,7 @@ namespace Misstab
             tpMain.Location = new Point(4, 4);
             tpMain.Name = "tpMain";
             tpMain.Padding = new Padding(3);
-            tpMain.Size = new Size(776, 397);
+            tpMain.Size = new Size(776, 520);
             tpMain.TabIndex = 0;
             tpMain.Text = "統合TL";
             tpMain.UseVisualStyleBackColor = true;
@@ -215,7 +209,7 @@ namespace Misstab
             pnMain.Controls.Add(lblSoftware);
             pnMain.Controls.Add(lblUpdatedAt);
             pnMain.Controls.Add(lblUser);
-            pnMain.Location = new Point(0, 452);
+            pnMain.Location = new Point(0, 581);
             pnMain.Name = "pnMain";
             pnMain.Size = new Size(784, 155);
             pnMain.TabIndex = 8;
@@ -272,46 +266,6 @@ namespace Misstab
             lblUser.Size = new Size(48, 20);
             lblUser.TabIndex = 0;
             lblUser.Text = "label1";
-            // 
-            // pnSub
-            // 
-            pnSub.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pnSub.Controls.Add(tabControl1);
-            pnSub.Location = new Point(0, 608);
-            pnSub.Name = "pnSub";
-            pnSub.Size = new Size(784, 108);
-            pnSub.TabIndex = 9;
-            // 
-            // tabControl1
-            // 
-            tabControl1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            tabControl1.Controls.Add(tpNotification);
-            tabControl1.Controls.Add(tpDebug);
-            tabControl1.Location = new Point(1, 6);
-            tabControl1.Name = "tabControl1";
-            tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(780, 99);
-            tabControl1.TabIndex = 0;
-            // 
-            // tpNotification
-            // 
-            tpNotification.Location = new Point(4, 24);
-            tpNotification.Name = "tpNotification";
-            tpNotification.Padding = new Padding(3);
-            tpNotification.Size = new Size(772, 71);
-            tpNotification.TabIndex = 0;
-            tpNotification.Text = "通知";
-            tpNotification.UseVisualStyleBackColor = true;
-            // 
-            // tpDebug
-            // 
-            tpDebug.Location = new Point(4, 24);
-            tpDebug.Name = "tpDebug";
-            tpDebug.Padding = new Padding(3);
-            tpDebug.Size = new Size(772, 71);
-            tpDebug.TabIndex = 1;
-            tpDebug.Text = "デバッグ";
-            tpDebug.UseVisualStyleBackColor = true;
             // 
             // chkMuteSound
             // 
@@ -389,7 +343,6 @@ namespace Misstab
             Controls.Add(lblPostDescription);
             Controls.Add(chkAutoBelowScroll);
             Controls.Add(chkMuteSound);
-            Controls.Add(pnSub);
             Controls.Add(pnMain);
             Controls.Add(cmdPost);
             Controls.Add(cmdAddInstance);
@@ -413,8 +366,6 @@ namespace Misstab
             statusStrip1.PerformLayout();
             pnMain.ResumeLayout(false);
             pnMain.PerformLayout();
-            pnSub.ResumeLayout(false);
-            tabControl1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -435,10 +386,6 @@ namespace Misstab
         private TextBox txtDetail;
         private Label lblUpdatedAt;
         private Label lblSoftware;
-        private Panel pnSub;
-        private TabControl tabControl1;
-        private TabPage tpNotification;
-        private TabPage tpDebug;
         private Label lblTLFrom;
         private ToolStripMenuItem 設定ToolStripMenuItem;
         private ToolStripMenuItem tspAPISetting;
